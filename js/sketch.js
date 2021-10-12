@@ -1,80 +1,53 @@
-let zoom;
-let x = 0;
-let y = 0;
-let z = 0;
+let arbo;
+let wise;
+//let sneaky = [];
+//let wise = [];
 
-let h = 20;
-let easing = .05;
-let img;
+//dropzone drag and dropzone
+let dropzone;
+let file;
+// gui
+//var gui
 
-let markers = {
-  one : {
-    x : 200,
-    y : 200,
-    rotation : 0
-  },
-  two : {
-    x: 0,
-    y: 0,
-    rotation : 0
-  }
-}
-
-let bundles = {
-
-}
+//let MediaBundles = [arbo, wise, sneaky]; // set of all media bundles
 
 function preload() {
-  owl = loadImage('../bundles/wise/owl.jpg');
-  liz = loadImage('../bundles/sneaky/liz.jpg');
+  owl = loadImage('./bundles/wise/owl.jpg');
+  tree0 = loadImage('./bundles/arbo/tree.png');
+  tree1 = loadImage('./bundles/arbo/tree2.jpg');
+  tree2 = loadImage('./bundles/arbo/tree3.png');
+  liz = loadImage('./bundles/sneaky/liz.jpg');
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight-20, WEBGL);
-  //  ortho(-width, width, height, -height/2, 0.1, 100);
-  zoom = createSlider(0, 3000, 500);
-  h = map(0, 0, 6, 5, 85);
-  zoom.position(10, height + h);
-  zoom.style('width', '80px');
+  createCanvas(windowWidth, windowHeight-100);
+  arbo = new mediaBundle(300, 400, 200, 0);
+  wise = new mediaBundle(123, 300, 100, 1);
 
-  }
+  dropzone = select('#dropzone');
+  dropzone.dragOver(highlight);
+  dropzone.dragLeave(unhighlight);
+  dropzone.drop(gotFile, unhighlight);
+
+};
+
+function highlight() {
+  dropzone.style('background-color','#ccc')
+}
+
+function unhighlight() {
+  dropzone.style('background-color','#fff')
+}
+
+function gotFile(file) {
+  let img1 = createImg(file.data);
+  image (img1, 0, 0, width, height);
+}
+
+
 
 function draw() {
-//  console.log(markers.one.x);
-  background(0);
-
-  mediaBundle(owl, markers.one);
-  mediaBundle(liz, markers.two);
-
-  z = zoom.value();
-  //  z = sliderGroup[1].value();
-  camera (x, y, (z/2.0) / tan(PI*30.0 / 180.0), x, y, 0, 0, 1, 0);
-
-}
-
-function mouseClicked(){
-  if (mouseY<height){
-    x = (mouseX-width/2);
-    y = (mouseY-height/2);
-
-camera (x, y, (z/2.0) / tan(PI*30.0 / 180.0), x, y, 0, 0, 1, 0)
-  }
-}
-
-function mediaBundle(name, marker) {
-
-  push();
-    //rotate based on marker data
-    rotate(0);
-    //pass image as texture
-    texture(name);
-    // move it according to marker data
-    translate(marker.x, marker.y);
-    plane(400, 400);
-  pop();
-}
-
-// add new bundle to register of bundles
-const newBundle = x => {
-    name : x;
+  background(255);
+  arbo.show();
+  wise.show();
 }
