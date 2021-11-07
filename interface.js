@@ -1,53 +1,73 @@
+//document.body.onload = addElement;
+
 let mediaBundles = [];
-let input, button;
+
 
 class MediaBundle {
-  constructor(element, x, y) {
-
-    this.element = element;
-    this.x = x;
-    this.y = y;
-    this.objects = [];
+  constructor() {
+    this.x;
+    this.y;
+    this.objects;
   }
 
-  write() {
-    let title = createElement('h2', this.element);
-    title.position(this.x, this.y);
+  get name() {
+    return this.name;
   }
 
-  newObj() {
-    let obj =  window.prompt('what is the name of this new media object?');
-    this.objects.push(obj);
+  get name() {
+    return this.name;
   }
+
+  get position() {
+    return (this.x, this.y);
+  }
+
+  get objects() {
+    return this.objects;
+  }
+
 }
 
-function setup() {
 
-input = createInput();
-input.position(20, 65);
 
-button = createButton('submit');
-button.position(input.x + input.width, 65);
-button.mousePressed(createMB);
-}
+//function draw() {
 
-function draw() {
+//for (let i = 0; i < mediaBundles.length; i++) {
+//  mediaBundles[i].write();
 
-  for (let i = 0; i < mediaBundles.length; i++) {
-  mediaBundles[i].write();
+//  }
+//}
 
-  }
-}
+
 
 function createMB() {
 
-  let name = new MediaBundle(input.value();, 50, 50);
+  let inputName = document.getElementById("newMBname").value; //grab the input from the form
+  if (mediaBundles.includes(inputName) === true) //if media bundle already contains
+  {
+      $("#MBCreateOutput").empty();
+      $("#MBCreateOutput").show();
+      document.getElementById("MBCreateOutput").innerHTML = "There is already a MediaBundle called " + inputName + ", please find a new name or edit that one.";
+      $("#MBCreateOutput").fadeOut(5000);
 
-   console.log('asking for name of new MB!');
+  }
+  else { //if name is new go ahead and make that baddy
+    mediaBundles.push(inputName); //adds name of JSON to list of bundles
 
-// dialog("Name your new media bundle")
- console.log('before push ' + mediaBundles);
-  mediaBundles.push(name);
-  console.log('afterpush ' + mediaBundles);
+    const test = new MediaBundle(); //creates new JSON
+
+   //let newDiv = document.createElement("div"); // creates interface editor
+    console.log(mediaBundles);
+
+    $("#MBCreateOutput").empty();
+    $("#MBCreateOutput").show();
+    document.getElementById("MBCreateOutput").innerHTML = "You've created a MediaBundle called " + inputName;
+    $("#MBCreateOutput").fadeOut(5000);
+    console.log(newObj);
+
+  }
+
+
+
 
 }
