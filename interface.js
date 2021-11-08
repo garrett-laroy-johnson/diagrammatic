@@ -108,7 +108,7 @@ function writeDiagram(){
    downloadAnchorNode.remove();
  }
 
- function readDiagram (){
+ function readDiagram (){ //this is broke. might be a good way to fix: https://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
    var input = document.createElement('input');
  input.type = 'file';
 
