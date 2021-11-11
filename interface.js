@@ -40,7 +40,7 @@ let MediaBundle = class {
         let clone = mbEdit.content.cloneNode(true);
         clone.querySelector("div").id = this.ui.module;
         clone.querySelector("svg").id = this.ui.trash;
-        clone.querySelector("svg").setAttribute("onclick", "deleteMB(" + this.ui.module + ")");
+        clone.querySelector("svg").setAttribute("onclick", "destructor(" + this.name + ")");
         clone.querySelector("h3").textContent = this.name;
         clone.querySelector("input").id = this.ui.input;
         clone.getElementById(this.ui.input).addEventListener("change", this.handleFile, false);
@@ -53,6 +53,13 @@ let MediaBundle = class {
   //  console.log(file.data)
     this.filelist = this.files; /* now you can work with the file list */
     console.log(this.filelist)
+    }
+
+
+   destructor(name){
+      this.module.remove();
+      let index = mediaBundles.find(element => element === name);
+      mediaBundles.splice(index,1)
     }
 
   createObject(name, origin, path) {
@@ -117,11 +124,7 @@ mediaBundles = data;
  input.click();
 }
 
-function deleteMB(name){
-  name.remove();
-  let index = mediaBundles.find(element => element === name);
-  mediaBundles.splice(index,1)
-}
+
 
 function createMB() {
   //grab + process name
