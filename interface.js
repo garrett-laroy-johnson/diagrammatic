@@ -26,6 +26,7 @@ let MediaBundle = class {
     this.objects = [];
     this.ui = {};
     this.filelist = [];
+    this.index;
     //this.editing = false;
     }
 
@@ -36,11 +37,12 @@ let MediaBundle = class {
           trash : this.name+"_trash",
           input : this.name+"_input",
       }
-       console.log(this.ui.module);
+
         let clone = mbEdit.content.cloneNode(true);
         clone.querySelector("div").id = this.ui.module;
+        document.getElementById(this.ui.module).setAttribute("onclick", "editing("+ this.id+ ")");
         clone.querySelector("svg").id = this.ui.trash;
-        clone.querySelector("svg").setAttribute("onclick", "destructor(" + this.name + ")");
+        clone.querySelector("svg").setAttribute("onclick", "mediaBundles["+ this.index + "].destructor()");
         clone.querySelector("h3").textContent = this.name;
         clone.querySelector("input").id = this.ui.input;
         clone.getElementById(this.ui.input).addEventListener("change", this.handleFile, false);
@@ -56,10 +58,10 @@ let MediaBundle = class {
     }
 
 
-   destructor(name){
-      this.module.remove();
-      let index = mediaBundles.find(element => element === name);
-      mediaBundles.splice(index,1)
+   destructor(){
+      document.getElementById(this.ui.module).remove();
+      //div.remove();
+      mediaBundles.splice(this.index,1)
     }
 
   createObject(name, origin, path) {
@@ -124,7 +126,11 @@ mediaBundles = data;
  input.click();
 }
 
-
+function updateIndex() {
+  for (i=0;i<mediaBundles.length;i++){
+  mediaBundles[i].index = i;
+  }
+}
 
 function createMB() {
   //grab + process name
@@ -136,7 +142,9 @@ function createMB() {
   } else {
     let b = new MediaBundle(inputName, mediaBundles.length, (width/2),(height/2)); //creates new JSON
     mediaBundles.push(b); //adds name of JSON to list of bundles
+    updateIndex();
     b.createUI();
+
     //showMB(inputName);
     logMB(b.name, "created"); //creates notice for the log
   }
