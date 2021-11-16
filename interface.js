@@ -7,7 +7,9 @@ let height = window.innerHeight;
 //HTML edit editor interface template reference
 const mbEdit = document.getElementById("mbModel"); // creates interface editor
 const  main = document.getElementById("main");
-console.log(main);
+
+require(./playground.js);
+
 //
 // let dropbox;
 //
