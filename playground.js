@@ -4,10 +4,11 @@ let numBundles = 10;
 let bundleNames = ["arbo", "sneaky", "wise"];
 let images = [];
 
+
 function preload() {
  for (i=0;i<3;i++){
  for (p=0;p<3;p++){
-   
+
    images[(i+1)*p]=loadImage(`bundles/${bundleNames[i]}/${p}.png`);
 //image[0] = loadImage("./0.png");
 }
@@ -24,9 +25,9 @@ function setup() {
   for (let i=0;i<numBundles; i++){
     let x = (window.innerWidth/numBundles)*i;
     let y = window.innerHeight/2;
-    let r = random(10,40);
-    let ranBundle = random(0,2);
-    bundles[i] = new bundle(x, y, r, r, ranBundle);
+    let r = random(10,200);
+    let ranBundle = Math.floor(random(0,8));
+    bundles[i] = new bundle(x, y, r, r, images[ranBundle]);
   }
 
 
@@ -34,7 +35,7 @@ function setup() {
 }
 
 function draw() {
-  background(127);
+  background(255);
   translate(tx, ty);
   scale(sf);
 
@@ -42,7 +43,6 @@ for (i=0;i<bundles.length;i++){
 bundles[i].over();
 bundles[i].update();
 bundles[i].show();
-
 }
 
 }

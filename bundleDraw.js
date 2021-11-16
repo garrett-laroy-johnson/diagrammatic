@@ -1,8 +1,10 @@
+let s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
 // Click and Drag an object
 // Daniel Shiffman <http://www.shiffman.net>
 
 class bundle {
-  constructor(x, y, w, h, mediaBundle) {
+  constructor(x, y, w, h, img) {
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
     this.x = x;
@@ -11,7 +13,8 @@ class bundle {
     this.h = h;
     this.offsetX = 0;
     this.offsetY = 0;
-    this.img = mediaBundle[random(0,3)]; 
+    this.img = img;
+    this.filter = (BLUR, 0);
   }
 
   over() {
@@ -33,15 +36,18 @@ class bundle {
 
   show() {
     stroke(0);
-    // Different fill based on state
-    if (this.dragging) {
-      fill(50);
-    } else if (this.rollover) {
-      fill(100);
-    } else {
-      fill(175, 200);
+    if (this.img) {
+      image(this.img, this.x,this.y, this.w, this.h);
+
     }
-    rect(this.x, this.y, this.w, this.h);
+    else {
+        rect(this.x, this.y, 200, 200);
+        stroke(0);
+        text(s, this.x, this.y, 200, 200);
+    }
+
+    // Different fill based on state
+
   }
 
   pressed() {
