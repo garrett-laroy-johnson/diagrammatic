@@ -6,9 +6,8 @@ let height = window.innerHeight;
 
 //HTML edit editor interface template reference
 const mbEdit = document.getElementById("mbModel"); // creates interface editor
-const  main = document.getElementById("main");
+const main = document.getElementById("main");
 
-require(./playground.js);
 
 //
 // let dropbox;
@@ -38,32 +37,45 @@ let MediaBundle = class {
           module : this.name+"_module",
           trash : this.name+"_trash",
           input : this.name+"_input",
+          nav : this.name+"_nav",
       }
+
 
         let clone = mbEdit.content.cloneNode(true);
         clone.querySelector("div").id = this.ui.module;
-        document.getElementById(this.ui.module).setAttribute("onclick", "editing("+ this.id+ ")");
+        clone.querySelector("div").setAttribute("onclick", `editing(${this.ui.module})`);
         clone.querySelector("svg").id = this.ui.trash;
-        clone.querySelector("svg").setAttribute("onclick", "mediaBundles["+ this.index + "].destructor()");
+        clone.querySelector("svg").setAttribute("onclick", `mediaBundles[${this.index}].destructor()`);
         clone.querySelector("h3").textContent = this.name;
         clone.querySelector("input").id = this.ui.input;
         clone.getElementById(this.ui.input).addEventListener("change", this.handleFile, false);
+        clone.querySelector("ul").id = this.ui.nav;
           main.appendChild(clone);
 
   }
 
   handleFile() {
-    //console.log(file);
+    console.log(file);
   //  console.log(file.data)
-    this.filelist = this.files; /* now you can work with the file list */
-    console.log(this.filelist)
+    console.log(this.file);
+    this.filelist.push(this.file); /* now you can work with the file list */
+    console.log(this.filelist);
+    this.updateUI();
     }
 
+    updateUI(){
+      for (i=0;i<this.filelist.length;i++){
+        let clone = tabModel.content.cloneNode(true);
+        //clone.querySelector("a").setAttribute = this.ui.module;
+        this.ui.nav.appendChild(clone);
 
+    }
+}
    destructor(){
       document.getElementById(this.ui.module).remove();
       //div.remove();
-      mediaBundles.splice(this.index,1)
+      //mediaBundles.splice(this.index,1)
+      delete mediaBundles(this.index);
     }
 
   createObject(name, origin, path) {
@@ -76,63 +88,6 @@ let MediaBundle = class {
 
 }
 
-
-let MediaObject = class {
-  constructor(name, path) {
-    this.name = name;
-    this.path = path;
-  }
-}
-
-const editor = {
-  editing: "none",
-}
-
-function editing(id){
-
-  if (editor.editing != "none"){
-    document.getElementById(editor.editing).classList.add('mb');
-    document.getElementById(editor.editing).classList.remove('mb-active');
-    editor.editing = id;
-    document.getElementById(editor.editing).classList.add('mb-active');
-    document.getElementById(editor.editing).classList.remove('mb');
-  } else {
-    editor.editing = id;
-    document.getElementById(editor.editing).classList.add('mb-active');
-    document.getElementById(editor.editing).classList.remove('mb');
-} }
-
-
-function writeDiagram(){
-   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(mediaBundles));
-   var downloadAnchorNode = document.createElement('a');
-   downloadAnchorNode.setAttribute("href",     dataStr);
-   downloadAnchorNode.setAttribute("download", "diagrammatic.json");
-   document.body.appendChild(downloadAnchorNode); // required for firefox
-   downloadAnchorNode.click();
-   downloadAnchorNode.remove();
- }
-//this is broke. might be a good way to fix: https://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
-function readDiagram(){
-   var input = document.createElement('input');
- input.type = 'file';
-
- input.onchange = e => {
-
-    // getting a hold of the file reference
-    var file = e.target.files[0];
-
-var data = JSON.parse(fs.readFileSync(file));
-mediaBundles = data;
-    }
- input.click();
-}
-
-function updateIndex() {
-  for (i=0;i<mediaBundles.length;i++){
-  mediaBundles[i].index = i;
-  }
-}
 
 function createMB() {
   //grab + process name
@@ -151,6 +106,44 @@ function createMB() {
     logMB(b.name, "created"); //creates notice for the log
   }
 }
+
+
+let MediaObject = class {
+  constructor(name, path) {
+    this.name = name;
+    this.path = path;
+  }
+}
+
+const editor = {
+  editing: "none",
+}
+
+function editing(id){
+
+//   if (editor.editing != "none"){
+//     document.getElementById(editor.editing).classList.add('mb');
+//     document.getElementById(editor.editing).classList.remove('mb-active');
+//     editor.editing = id;
+//     document.getElementById(editor.editing).classList.add('mb-active');
+//     document.getElementById(editor.editing).classList.remove('mb');
+//   } else {
+//     editor.editing = id;
+//     document.getElementById(editor.editing).classList.add('mb-active');
+//     document.getElementById(editor.editing).classList.remove('mb');
+// }
+}
+
+
+
+
+function updateIndex() {
+  for (i=0;i<mediaBundles.length;i++){
+  mediaBundles[i].index = i;
+  }
+}
+
+
 
 //check to see if name is a repeat.
   function checkName (name, type){
