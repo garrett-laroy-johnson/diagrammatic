@@ -21,7 +21,13 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight);
+  let cnv = createCanvas(window.innerWidth, window.innerHeight);
+  cnv.parent('sandbox');
+  document.getElementById('sandbox').style.display === "none";
+  testBundleCreate();
+}
+
+function testBundleCreate(){
   for (let i=0;i<numBundles; i++){
     let x = (window.innerWidth/numBundles)*i;
     let y = window.innerHeight/2;
@@ -30,14 +36,18 @@ function setup() {
     bundles[i] = new bundle(x, y, r, r, images[ranBundle]);
   }
 
-
-
 }
+
 
 function draw() {
   background(255);
+  push()
+  strokeWeight(20);
+  line(0,0,windowWidth,0);
+  pop();
   translate(tx, ty);
   scale(sf);
+
 
 for (i=0;i<bundles.length;i++){
 bundles[i].over();
