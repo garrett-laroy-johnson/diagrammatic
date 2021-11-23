@@ -1,9 +1,9 @@
 let sf = 1, tx = 0, ty = 0;
-let bundles = [];
-let numBundles = 10;
+
+
+
 let bundleNames = ["arbo", "sneaky", "wise"];
 let images = [];
-
 
 function preload() {
  for (i=0;i<3;i++){
@@ -15,17 +15,8 @@ function preload() {
 
 
 }
-
-
-
 }
 
-function setup() {
-  let cnv = createCanvas(window.innerWidth, window.innerHeight);
-  cnv.parent('sandbox');
-  document.getElementById('sandbox').style.display === "none";
-  testBundleCreate();
-}
 
 function testBundleCreate(){
   for (let i=0;i<numBundles; i++){
@@ -33,10 +24,24 @@ function testBundleCreate(){
     let y = window.innerHeight/2;
     let r = random(10,200);
     let ranBundle = Math.floor(random(0,8));
-    bundles[i] = new bundle(x, y, r, r, images[ranBundle]);
+    mediaBundles[i] = new MediaBundle(null, i, x, y, r, r, images[ranBundle]);
   }
-
 }
+
+
+function setup() {
+  let cnv = createCanvas(window.innerWidth, window.innerHeight);
+  cnv.parent('sandbox');
+
+  document.getElementById("sandbox").style.display === "none";
+  let s = document.getElementById("sandbox").children;
+    for(i = 0; i < s.length ; i++) {
+     s[i].style.display = "none";
+    }
+  //testBundleCreate();
+}
+
+
 
 
 function draw() {
@@ -48,11 +53,10 @@ function draw() {
   translate(tx, ty);
   scale(sf);
 
-
-for (i=0;i<bundles.length;i++){
-bundles[i].over();
-bundles[i].update();
-bundles[i].show();
+for (i=0;i<mediaBundles.length;i++){
+mediaBundles[i].over();
+mediaBundles[i].update();
+mediaBundles[i].show();
 }
 
 }
@@ -78,25 +82,4 @@ function keyPressed() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}
-
-function mousePressed() {
-  for (i=0;i<bundles.length;i++){
-  bundles[i].pressed();
-
-  }
-
-}
-
-function mouseReleased() {
-  for (i=0;i<bundles.length;i++){
-  bundles[i].released();
-
-
-  }
-
-}
-
-function group () {
-
 }

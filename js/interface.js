@@ -1,6 +1,5 @@
 //document.body.onload = addElement;
 
-let mediaBundles = [];
 let width = window.innerWidth;
 let height = window.innerHeight;
 
@@ -17,103 +16,6 @@ const main = document.getElementById("main");
 // dropbox.addEventListener("dragover", dragover, false);
 // dropbox.addEventListener("drop", drop, false);
 
-let MediaBundle = class {
-  constructor(name, index, x , y) {
-    this.name = name;
-    this.x = x;
-    this.y = y;
-    this.index = index;
-    this.marker;
-    this.objects = [];
-    this.ui = {};
-    this.filelist = [];
-    this.index;
-    //this.editing = false;
-    }
-
-  createUI() {
-    this.ui = {
-          // set IDs for HTML DOM elements that need JS interaction
-          module : this.name+"_module",
-          trash : this.name+"_trash",
-          input : this.name+"_input",
-          nav : this.name+"_nav",
-      }
-
-
-        let clone = mbEdit.content.cloneNode(true);
-        clone.querySelector("div").id = this.ui.module;
-        clone.querySelector("div").setAttribute("onclick", `editing(${this.ui.module})`);
-        clone.querySelector("svg").id = this.ui.trash;
-        clone.querySelector("svg").setAttribute("onclick", `mediaBundles[${this.index}].destructor()`);
-        clone.querySelector("h3").textContent = this.name;
-        clone.querySelector("input").id = this.ui.input;
-        clone.getElementById(this.ui.input).addEventListener("change", this.handleFile, false);
-        clone.querySelector("ul").id = this.ui.nav;
-          main.appendChild(clone);
-
-  }
-
-  handleFile() {
-    console.log(file);
-  //  console.log(file.data)
-    console.log(this.file);
-    this.filelist.push(this.file); /* now you can work with the file list */
-    console.log(this.filelist);
-    this.updateUI();
-    }
-
-    updateUI(){
-      for (i=0;i<this.filelist.length;i++){
-        let clone = tabModel.content.cloneNode(true);
-        //clone.querySelector("a").setAttribute = this.ui.module;
-        this.ui.nav.appendChild(clone);
-
-    }
-}
-   destructor(){
-      document.getElementById(this.ui.module).remove();
-      //div.remove();
-      //mediaBundles.splice(this.index,1)
-      delete mediaBundles(this.index);
-    }
-
-  createObject(name, origin, path) {
-    let b = new MediaObject(name);
-    this.objects.push(b);
-  }
-  get position() {
-    return (this.x, this.y);
-  }
-
-}
-
-
-function createMB() {
-  //grab + process name
-  let inputName = document.getElementById("newMBname").value; //grab the input from the form
-  inputName = inputName.replace(/\s/g, "_"); //remove spaces, add underscore
-  //check for duplicates
-  if (checkName(inputName, "mediaBundle")) {
-    logMB(inputName, "duplicate"); //creates notice for the log
-  } else {
-    let b = new MediaBundle(inputName, mediaBundles.length, (width/2),(height/2)); //creates new JSON
-    mediaBundles.push(b); //adds name of JSON to list of bundles
-    updateIndex();
-    b.createUI();
-
-    //showMB(inputName);
-    logMB(b.name, "created"); //creates notice for the log
-  }
-}
-
-
-let MediaObject = class {
-  constructor(name, path) {
-    this.name = name;
-    this.path = path;
-  }
-}
 
 const editor = {
   editing: "none",
