@@ -2,21 +2,19 @@ let sf = 1, tx = 0, ty = 0;
 
 
 
-let bundleNames = ["arbo", "sneaky", "wise"];
-let images = [];
+//let bundleNames = ["arbo", "sneaky", "wise"];
+//let images = [];
 
 function preload() {
- for (i=0;i<3;i++){
- for (p=0;p<3;p++){
-
-   images[(i+1)*p]=loadImage(`bundles/${bundleNames[i]}/${p}.png`);
-//image[0] = loadImage("./0.png");
+ // for (i=0;i<3;i++){
+ // for (p=0;p<3;p++){
+ //
+ //   images[(i+1)*p]=loadImage(`bundles/${bundleNames[i]}/${p}.png`);
+// //image[0] = loadImage("./0.png");
+// }
+// }
+// }
 }
-
-
-}
-}
-
 
 function testBundleCreate(){
   for (let i=0;i<numBundles; i++){
@@ -52,6 +50,7 @@ function draw() {
   pop();
   translate(tx, ty);
   scale(sf);
+  ellipseMode(CENTER);
 
 for (i=0;i<mediaBundles.length;i++){
 mediaBundles[i].over();

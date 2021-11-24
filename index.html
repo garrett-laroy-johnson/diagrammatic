@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="js/p5.min.js"></script>
+  <script src="js/p5.js"></script>
   <script src="js/readwrite.js"></script>
   <script src="js/playground.js"></script>
   <script src="js/mediabundle.js"></script>
@@ -56,7 +56,14 @@
                   <input type="file" webkitdirectory multiple/>
 
                 </div>
-                <div class = "col-9">
+                <div class = "col-6">
+                  Display header: <input type="checkbox" id="displayHeader" onclick="toggleHeader()" checked>
+                  <br>Display gradient: <input type="checkbox" id="displayGradient" onclick="toggleGradient()">
+                  <br>Display particles: <input type="checkbox" id="displayParticles" onclick="toggleParticles()">
+
+                </div>
+                <div class = "col-3">
+
                 </div>
                 </div>
                 <div class="mb-footer row">
