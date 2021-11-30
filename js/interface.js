@@ -8,15 +8,6 @@ const mbEdit = document.getElementById("mbModel"); // creates interface editor
 const main = document.getElementById("main");
 
 
-//
-// let dropbox;
-//
-// dropbox = document.getElementById("dropbox");
-// dropbox.addEventListener("dragenter", dragenter, false);
-// dropbox.addEventListener("dragover", dragover, false);
-// dropbox.addEventListener("drop", drop, false);
-
-
 const editor = {
   editing: "none",
 }
@@ -125,24 +116,3 @@ function logMB(inputName, log)
   document.getElementById("MBCreateOutput").innerHTML = text;
   $("#MBCreateOutput").fadeOut(5000);
 }
-
-// function mbIndex(name,type) {
-//   switch (type) {
-//     case "mediaBundle":
-//       for (i=0;i<mediaBundles.length;i++){
-//         if (mediaBundles[i].name===name){
-//           return i;
-//         }
-//       }
-//       break;
-//     case "mediaObject":
-//     for (i=0;i<mediaBundles.length;i++){
-//       for (d=0;d<mediaBundles[i].objects.length;d++){
-//       if (mediaBundles[i].objects[d]===name){
-//         return [i,d];
-//       }
-//     }
-//   }
-//       break;
-//     }
-// }

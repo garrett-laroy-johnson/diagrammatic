@@ -1,3 +1,5 @@
+
+console.log(tab);
 let mediaBundles = [];
 let numBundles = 10;
 //this should eventually be individually generated in each media object
@@ -17,7 +19,8 @@ let MediaBundle = class {
     this.marker;
     this.objects = [];
     this.ui = {};
-    this.filelist = [];
+    this.fileInput;
+    this.fileList = [];
     this.index;
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
@@ -49,12 +52,15 @@ let MediaBundle = class {
     this.ui = {
           // set IDs for HTML DOM elements that need JS interaction
           module : this.name+"_module",
+          title : this.name+"_title",
           trash : this.name+"_trash",
-          input : this.name+"_input",
+          fileGrab : this.name+"_fileGrab",
+          fileGrabButton : this.name+"_fileGrabButton",
           nav : this.name+"_nav",
           header: this.name+"_header",
           gradient: this.name+"_gradient",
-          particles: this.name+"_particles"
+          particles: this.name+"_particles",
+          tab: this.name+"_tab"
       };
 
 
@@ -76,28 +82,38 @@ let MediaBundle = class {
           // set trash module, create onclick behavior to trigger destructor()
         clone.querySelector("svg").id = this.ui.trash;
         clone.querySelector("svg").setAttribute("onclick", `mediaBundles[${this.index}].destructor()`);
-        //display unique mediabundle name
-        clone.querySelector("h3").textContent = this.name;
-        clone.querySelector("input").id = this.ui.input;
-        clone.getElementById(this.ui.input).addEventListener("change", this.handleFile, false);
+
+        //display unique mediabundle name, give it a DOM ID if need to change it.
+        clone.querySelector("h3").id = this.ui.title;
+        clone.getElementById(this.ui.title).textContent = this.name;
+        //clone inputs
+
+        clone.getElementById("fileGrab").id = this.ui.fileGrab;
+
+        clone.getElementById("fileGrabButton").id = this.ui.fileGrabButton;
+        clone.getElementById(this.ui.fileGrabButton).setAttribute("onClick", `mediaBundles[${this.index}].handleFile()`);
+
+        //clone.getElementById(this.ui.input).addEventListener("change", this.handleFile);
+
         clone.querySelector("ul").id = this.ui.nav;
         main.appendChild(clone);
 
   }
 
   handleFile() {
-    console.log(file);
-  //  console.log(file.data)
-    console.log(this.file);
-    this.filelist.push(this.file); /* now you can work with the file list */
-    console.log(this.filelist);
+    this.fileInput = document.getElementById(this.ui.fileGrab);
+    let files = this.fileInput.files;
+    for (i=0;i<files.length;i++){
+      this.fileList.push(this.fileInput.files[i]); /* now you can work with the file list */
+    }
+      console.log(this.fileList);
     this.updateUI();
     }
 
-    updateUI(){
-      for (i=0;i<this.filelist.length;i++){
-        let clone = tabModel.content.cloneNode(true);
-        //clone.querySelector("a").setAttribute = this.ui.module;
+  updateUI(){
+      for (i=0;i<this.fileList.length;i++){
+        let clone = tab.content.cloneNode(true);
+        clone.querySelector("a").id = `${this.ui.tab}_${i}`;
         this.ui.nav.appendChild(clone);
       }
     }
@@ -192,15 +208,15 @@ let MediaBundle = class {
       }
 
     if (this.header) {
-    let head = this.name;
-    push();
-    fill(0);
-    rect(this.x, this.y- 20, 200, 10);
-    //stroke(255);
-    fill(255);
-    text(head, this.x, this.y - 10);
-    pop();
-    }
+      let head = this.name;
+      push();
+      fill(0);
+      rect(this.x, this.y- 20, 200, 10);
+      //stroke(255);
+      fill(255);
+      text(head, this.x, this.y - 10);
+      pop();
+      }
     if (this.img) {
       image(this.img, this.x,this.y, this.w, this.h);
     }
@@ -251,6 +267,15 @@ let MediaBundle = class {
       this.offsetY = this.y - mouseY;
 
     }
+  }
+
+  drag() {
+    // if (this.dragging = true){
+    //       strokeWeight (10);
+    //       stroke(0);
+    //       noFill();
+    //       rect(this.x - 10 , this.y - 30, 220, 240);
+    // }
   }
 
   released() {

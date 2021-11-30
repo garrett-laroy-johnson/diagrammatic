@@ -45,26 +45,32 @@
                     <li class="nav-item">
                       <a class="nav-link active" href="#">+</a>
                     </li>
-                    <li class="nav-item" id="tabModel">
+                    <li class="nav-item" id="tab">
                       <a class="nav-link" href="#"></a>
                     </li>
                   </ul>
                 </div>
                 <div class="card-body row" style = "text-align:left">
-                  <div class = "col-3">
-                  <h5>add media objects</h5>
-                  <input type="file" webkitdirectory multiple/>
-
-                </div>
-                <div class = "col-6">
-                  Display header: <input type="checkbox" id="displayHeader" onclick="toggleHeader()" checked>
-                  <br>Display gradient: <input type="checkbox" id="displayGradient" onclick="toggleGradient()">
-                  <br>Display particles: <input type="checkbox" id="displayParticles" onclick="toggleParticles()">
-
+                  <div class = "col-9">
+                    <div class="input-group">
+                      <input type="file" class="form-control" id="fileGrab" aria-describedby="inputGroupFileAddon04" aria-label="Upload" multiple>
+                      <button class="btn btn-outline-secondary" type="button" id="fileGrabButton">Add Media Object(s)</button>
+                    </div>
                 </div>
                 <div class = "col-3">
-
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Display Header</label>
+                    <input class="form-check-input" type="checkbox" id="displayHeader" onclick="toggleHeader()" checked>
+                 </div>
+                  <div class="form-check">
+                   <label class="form-check-label" for="flexCheckDefault">Display Gradient</label>
+                   <input class="form-check-input" type="checkbox" id="displayGradient" onclick="toggleGradient()">
+                 </div>
+                 <div class ="form-check">
+                  <label class="form-check-label" for="flexCheckDefault">Display Particles</label> <input class="form-check-input" type="checkbox" id="displayParticles" onclick="toggleParticles()">
                 </div>
+                </div>
+
                 </div>
                 <div class="mb-footer row">
                   <div class="col-9">
