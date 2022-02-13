@@ -52,12 +52,11 @@ function draw() {
   scale(sf);
   ellipseMode(CENTER);
 
-for (i=0;i<mediaBundles.length;i++){
-mediaBundles[i].over();
-mediaBundles[i].update();
-mediaBundles[i].show();
-}
-
+  for (i=0;i<mediaBundles.length;i++){
+    mediaBundles[i].over();
+    mediaBundles[i].update();
+    mediaBundles[i].show();
+  }
 }
 
 function applyScale(s) {
