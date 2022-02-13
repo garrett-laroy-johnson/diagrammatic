@@ -1,5 +1,5 @@
 
-console.log(tab);
+//console.log(tab);
 let mediaBundles = [];
 let numBundles = 10;
 //this should eventually be individually generated in each media object

@@ -16,15 +16,6 @@ function preload() {
 // }
 }
 
-function testBundleCreate(){
-  for (let i=0;i<numBundles; i++){
-    let x = (window.innerWidth/numBundles)*i;
-    let y = window.innerHeight/2;
-    let r = random(10,200);
-    let ranBundle = Math.floor(random(0,8));
-    mediaBundles[i] = new MediaBundle(null, i, x, y, r, r, images[ranBundle]);
-  }
-}
 
 
 function setup() {
@@ -36,7 +27,7 @@ function setup() {
     for(i = 0; i < s.length ; i++) {
      s[i].style.display = "none";
     }
-  //testBundleCreate();
+  //testBundleCreate(); // uncomment to generate test bundles
 }
 
 
