@@ -35,8 +35,14 @@
         </div>
       </div>
     </div>
+
+
+
+
       <div class="input-group mb-3 row">
         <div class="row mb-12" id="main">
+
+
 
           <template id="mbModel">
             <div class="mb col-12 card text-center">
@@ -47,12 +53,12 @@
                     <li class="nav-item">
                       <a class="nav-link active" href="#">+</a>
                     </li>
-                    <li class="nav-item" id="tab">
+                    <li id="objTab" class="nav-item">
                       <a class="nav-link" href="#"></a>
                     </li>
                   </ul>
                 </div>
-                <div class="card-body row" style = "text-align:left">
+                <div id = "objEditorAddModel" class="card-body row" style = "text-align:left">
                   <div class = "col-9">
                     <div class="input-group">
                       <input type="file" class="form-control" id="fileGrab" aria-describedby="inputGroupFileAddon04" aria-label="Upload" multiple>
@@ -60,6 +66,10 @@
                     </div>
                 </div>
                 <div class = "col-3">
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Stack Objects</label>
+                    <input class="form-check-input" type="checkbox" id="stackObjects" onclick="stackObjects()" checked>
+                 </div>
                   <div class="form-check">
                     <label class="form-check-label" for="flexCheckDefault">Display Header</label>
                     <input class="form-check-input" type="checkbox" id="displayHeader" onclick="toggleHeader()" checked>

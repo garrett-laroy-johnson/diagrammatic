@@ -28,6 +28,8 @@ function setup() {
      s[i].style.display = "none";
     }
   //testBundleCreate(); // uncomment to generate test bundles
+
+  imageMode(CENTER);
 }
 
 

@@ -21,12 +21,13 @@ let MediaBundle = class {
     this.ui = {};
     this.fileInput;
     this.fileList = [];
+    this.fileVars = [];
     this.index;
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
     this.editing = false;
     this.filter = (BLUR, 0);
-    this.img;
+    this.img =[];
     this.header = true;
     this.aura = {
       circum : 2 * this.w
@@ -60,7 +61,8 @@ let MediaBundle = class {
           header: this.name+"_header",
           gradient: this.name+"_gradient",
           particles: this.name+"_particles",
-          tab: this.name+"_tab"
+          tab: this.name+"_tab",
+          objTabs : []
       };
 
 
@@ -90,6 +92,9 @@ let MediaBundle = class {
 
         clone.getElementById("fileGrab").id = this.ui.fileGrab;
 
+        clone.getElementById("objTab").id = this.ui.tab;
+
+
         clone.getElementById("fileGrabButton").id = this.ui.fileGrabButton;
         clone.getElementById(this.ui.fileGrabButton).setAttribute("onClick", `mediaBundles[${this.index}].handleFile()`);
 
@@ -100,21 +105,56 @@ let MediaBundle = class {
 
   }
 
+//this function handles ADD MEDIA OBJECT file inputs
+
+// it's also loading images right now, and assuming that all inputs are images
   handleFile() {
+    // assign the files to the object key
     this.fileInput = document.getElementById(this.ui.fileGrab);
+    // parse out the files
     let files = this.fileInput.files;
+    // get info to make a mediaObject
     for (i=0;i<files.length;i++){
-      this.fileList.push(this.fileInput.files[i]); /* now you can work with the file list */
-    }
-      console.log(this.fileList);
-    this.updateUI();
+
+      let name = files[i].name.split(' ')[0]
+
+      let path = URL.createObjectURL(files[i]);
+
+
+
+      this.createObject(files[i],name,path);
+
     }
 
+console.log(mediaBundles[0].objects);
+
+    this.updateUI();
+
+
+    }
+
+    loadMedia(list){
+      for (i=0;i<list.length;i++){
+
+
+      }
+    }
+
+
   updateUI(){
+    // clone new tab
+    let t =  document.getElementById(this.ui.tab);
+ // create reference for nav container
+    let parentNav = document.getElementById(this.ui.nav);
+
+    // iterate through new files and create tabs for them.
       for (i=0;i<this.fileList.length;i++){
-        let clone = tab.content.cloneNode(true);
-        clone.querySelector("a").id = `${this.ui.tab}_${i}`;
-        this.ui.nav.appendChild(clone);
+        let clone = t.cloneNode(true);
+         clone.id = `${this.name}_objTabs_${i}`;
+         let link = clone.querySelector("a");
+         link.innerHTML = `${this.fileList[i].name}`
+
+        parentNav.appendChild(clone);
       }
     }
 
@@ -125,9 +165,10 @@ let MediaBundle = class {
       delete mediaBundles(this.index);
     }
 
-    createObject(name, origin, path) {
-      let b = new MediaObject(name);
+    createObject(file, name, path) {
+      let b = new MediaObject(file, name, path);
       this.objects.push(b);
+
     }
     get position() {
       return (this.x, this.y);
@@ -217,9 +258,9 @@ let MediaBundle = class {
       text(head, this.x, this.y - 10);
       pop();
       }
-    if (this.img) {
-      image(this.img, this.x,this.y, this.w, this.h);
-    }
+    // if (this.img) {
+    //   image(this.img, this.x,this.y, this.w, this.h);
+    // }
     else {
         rect(this.x, this.y, 200, 200);
         stroke(0);
@@ -227,14 +268,19 @@ let MediaBundle = class {
     }
 
     // Different fill based on state
+// if (this.fileVars.length>0){
+     for (let m=0;m<this.objects.length;m++){
 
-  }
 
+  image(this.objects[i].img,this.x + m*20,this.y+ m*20, this.w,this.h);
+ }
+  // }
+}
 
   toggleHeader(){
     let checkBox = document.getElementById(`${this.ui.header}`);
     this.header = checkBox.checked;
-    //= this.ui.header;
+
   }
 
   toggleGradient(){
@@ -331,9 +377,15 @@ function createMB() {
 
 
 let MediaObject = class {
-  constructor(name, path) {
+  constructor(file, name, path, varName) {
     this.name = name;
     this.path = path;
+    this.type;
+    this.width;
+    this.height;
+    this.file = file;
+    this.offset = [random(20), random(20)];
+    this.img = loadImage(path, '');
   }
 }
 
