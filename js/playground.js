@@ -74,3 +74,11 @@ function keyPressed() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
+
+function keyPressed() {
+  if (keyCode === ESCAPE) {
+    let fs = fullscreen();
+   fullscreen(!fs);
+  }
+}
