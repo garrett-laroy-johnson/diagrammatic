@@ -10,7 +10,7 @@ function writeDiagram(){
    let h = hour();
    let m = minute();
    let s = second();
-createStringDict()
+
 saveJSON(mediaBundles, "diagrammatic" + d + h + m + s)
  }
 //this is broke. might be a good way to fix: https://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
