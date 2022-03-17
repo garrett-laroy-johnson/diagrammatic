@@ -23,8 +23,9 @@ Add (2) media types to Diagrammatic:
 ## Sandbox
 1. Toggle off bootstrap grid margins✅
 2. floating parameter menus
-3. Create full window canvas 
+3. Create full window canvas
 
 
 #Coding log
 3.16.22 // left project with rename object function half working. Need to connect Button click to updateName() function.
+3.17.22 // OK, started moving rename and tab generation to mediaobject.js as media object functions. makes more sense anyway...
