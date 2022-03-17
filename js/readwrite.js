@@ -11,7 +11,7 @@ function writeDiagram(){
    let m = minute();
    let s = second();
 
-saveJSON(mediaBundles, "diagrammatic" + d + h + m + s)
+saveJSON(mediaBundles, "diagrammatic" + d + h + m + s + ".json");
  }
 //this is broke. might be a good way to fix: https://codepen.io/KryptoniteDove/post/load-json-file-locally-using-pure-javascript
 function readDiagram(){
