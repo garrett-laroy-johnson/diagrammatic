@@ -18,6 +18,7 @@ let MediaBundle = class {
     this.marker;
     this.objects = [];
     this.ui = {};
+    this.bgBox = true;
     this.fileInput;
     this.fileList = [];
     this.fileVars = [];
@@ -67,6 +68,7 @@ let MediaBundle = class {
       stack: this.name + "_stack",
       particles: this.name + "_particles",
       tab: this.name + "_tab",
+      rename: this.name + "_rename",
       objTabs: []
     };
 
@@ -112,6 +114,7 @@ let MediaBundle = class {
 
 
     clone.getElementById("fileGrabButton").id = this.ui.fileGrabButton;
+
     clone.getElementById(this.ui.fileGrabButton).setAttribute("onClick", `mediaBundles[${this.index}].handleFile()`);
 
     //clone.getElementById(this.ui.input).addEventListener("change", this.handleFile);
@@ -138,13 +141,13 @@ let MediaBundle = class {
 
       this.createObject(files[i], name, path);
 
+
     }
 
-    console.log(mediaBundles[0].objects);
+    this.updateUI(files.length);
 
-    this.updateUI();
-
-
+    logMB(files.length, "newObj");
+    this.fileInput.value = '';
   }
 
   loadMedia(list) {
@@ -155,22 +158,49 @@ let MediaBundle = class {
   }
 
 
-  updateUI() {
+  updateUI(length) {
     // clone new tab
     let t = document.getElementById(this.ui.tab);
+
     // create reference for nav container
     let parentNav = document.getElementById(this.ui.nav);
 
+   // get template editor code; NOTE: this is generic and will need to change for different media types;
+    let tEdit = document.getElementById("objPaneImg");
+    let editParent = document.getElementById("myTabContent");
     // iterate through new files and create tabs for them.
-    for (i = 0; i < this.fileList.length; i++) {
+    for (i = 0; i < length; i++) {
       let clone = t.cloneNode(true);
       clone.id = `${this.name}_objTabs_${i}`;
-      let link = clone.querySelector("a");
-      link.innerHTML = `${this.fileList[i].name}`
+
+      let editClone = tEdit.cloneNode(true);
+      editClone.id = `${this.name}_objTabEditor_${i}`;
+
+      editClone.querySelector("img").setAttribute("src", `${this.objects[i].path}` )
+
+      editClone.querySelector("input").id = this.ui.rename;
+      editClone.querySelector("input").setAttribute("value", "rename" )
+      editClone.querySelector("button").setAttribute("onclick", `updateName(${this.objects[i].name})`);
+
+  //    editClone.querySelector("input").setAttribute("onchange", `${this.updateName(this.value)}` )
+
+
+      let link = clone.querySelector("button");
+
+      link.setAttribute("data-bs-target", `#${this.name}_objTabEditor_${i}`);
+      link.innerHTML = `${this.objects[i].name}`;
 
       parentNav.appendChild(clone);
+      editParent.appendChild(editClone);
     }
   }
+
+
+ updateName(name){
+   this.name = name;
+   console.log("name is updated " + this.name);
+
+ }
 
   destructor() {
     document.getElementById(this.ui.module).remove();
@@ -182,6 +212,7 @@ let MediaBundle = class {
   createObject(file, name, path) {
     let b = new MediaObject(file, name, path);
     this.objects.push(b);
+
 
   }
   get position() {
@@ -206,10 +237,25 @@ let MediaBundle = class {
         this.particles.y[i] = this.offsetY + mouseY;
         this.particles.x[i] = this.offsetX + mouseX;
       }
+      push();
+      ellipseMode(CORNER);
+      strokeWeight (10);
+      stroke(0,255,255);
+      noFill();
+      circle(this.x, this.y, this.w, this.h);
+
+      pop();
+
     }
   }
 
   show() {
+
+    if (this.bgBox){
+
+    }
+
+
 
     if (this.gradient) {
       //let h = random(0, 360);
@@ -335,10 +381,6 @@ else {
         image(this.objects[m].img, xPos, yPos, this.w, this.h);
 
 
-
-
-
-
     }
   } else {
       for (let m = 0; m < this.objects.length; m++) {
@@ -390,7 +432,7 @@ toggleParticles() {
 
 pressed() {
   // Did I click on the rectangle?
-  if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+  if (this.rollover) {
     this.dragging = true;
 
     // If so, keep track of relative location of click to corner of rectangle
@@ -399,14 +441,8 @@ pressed() {
 
 }
 }
-drag() {
-  // if (this.dragging = true){
-  //       strokeWeight (10);
-  //       stroke(0);
-  //       noFill();
-  //       rect(this.x - 10 , this.y - 30, 220, 240);
-  // }
-}
+
+
 
 released() {
   // Quit dragging
@@ -416,25 +452,40 @@ released() {
 
 
 
-
-function mousePressed() {
+//trigger drag for given bundle
+function mouseDragged() {
   for (i = 0; i < mediaBundles.length; i++) {
     mediaBundles[i].pressed();
+      return false;
   }
 
 }
 
+function mouseClicked() {
+
+}
+// here are some dragging fucntions (releases all objects when mouse up) and also click to cycle through objects
 function mouseReleased() {
   for (i = 0; i < mediaBundles.length; i++) {
-    mediaBundles[i].released();
+//if the mouse is over the bundle and it is not being dragged, rotate-shift the mediaobject array
+  if (mediaBundles[i].rollover) {
+        if (mediaBundles[i].dragging == false) {
+            mediaBundles[i].objects.unshift(mediaBundles[i].objects.pop());
+          }
+          }
 
   }
 
+  for (i = 0; i < mediaBundles.length; i++) {
+          //release all bundles from this.dragging
+          mediaBundles[i].released();
+  }
 }
 
-function group() {
 
-}
+
+
+
 
 
 
