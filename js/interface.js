@@ -133,16 +133,11 @@ function editing(id){
 // }
 }
 
-
-
-
 function updateIndex() {
   for (i=0;i<mediaBundles.length;i++){
   mediaBundles[i].index = i;
   }
 }
-
-
 
 //check to see if name is a repeat.
   function checkName (name, type){
@@ -157,10 +152,8 @@ function updateIndex() {
       }
 }
 
-
-
-function logMB(inputName, log)
-  { // logs feedback to psuedoconsole
+function logMB(inputName, log)  {
+  // logs feedback to psuedoconsole
   let text;
   switch (log) {
     case "duplicate":
@@ -170,11 +163,11 @@ function logMB(inputName, log)
       text = "You have successfully created a MediaBundle called " + inputName + ".";
       break;
       case "newObj":
-        text = "You have successfully added a new object called " + inputName + ".";
+        text = "You have successfully added " + inputName + " new object(s).";
         break;
     }
   $("#MBCreateOutput").empty();
   $("#MBCreateOutput").show();
   document.getElementById("MBCreateOutput").innerHTML = text;
-  $("#MBCreateOutput").fadeOut(5000);
+  $("#MBCreateOutput").fadeOut(2000);
 }

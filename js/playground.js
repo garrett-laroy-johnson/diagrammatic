@@ -49,6 +49,8 @@ function draw() {
     mediaBundles[i].over();
     mediaBundles[i].update();
     mediaBundles[i].show();
+
+
   }
 }
 
