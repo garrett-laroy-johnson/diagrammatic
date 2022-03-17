@@ -18,6 +18,7 @@ function changeTab (dest) {
     let n = document.getElementById("mbFactory").children;
     let m = document.getElementById("main").children;
     let s = document.getElementById("sandbox").children;
+    let c = document.getElementById("diaContainer");
 
   switch (dest)  {
   case 'sandbox':
@@ -37,6 +38,7 @@ function changeTab (dest) {
       }
     document.getElementById("sandboxTab").classList.add('active');
     document.getElementById("editorTab").classList.remove('active');
+    c.setAttribute("class","container-fluid");
   break;
   case 'editor':
     document.getElementById("mbFactory").style.display === "block";
@@ -57,6 +59,7 @@ function changeTab (dest) {
       }
     document.getElementById("sandboxTab").classList.remove('active');
     document.getElementById("editorTab").classList.add('active');
+    c.setAttribute("class","container");
 }
 }
 

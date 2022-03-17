@@ -21,8 +21,9 @@ Add (2) media types to Diagrammatic:
 ## Github compatability & documentation
 
 ## Sandbox
-1. Toggle off bootstrap grid margins
+1. Toggle off bootstrap grid margins✅
 2. floating parameter menus
+3. Create full window canvas 
 
 
 #Coding log

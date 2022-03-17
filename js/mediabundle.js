@@ -1,10 +1,5 @@
-//console.log(tab);
+//array containing all mediaBundles;
 let mediaBundles = [];
-let numBundles = 10;
-//this should eventually be individually generated in each media object
-//let palette = [rgba(255,255,255,255),rgba(255,255,255,255),rgba(255,255,255,255),rgba(255,255,255,255),rgba(255,255,255,255),rgba(255,255,255,255)]
-/* Extended Array */
-// [{"name":"Melon","hex":"fec5bb","rgb":[254,197,187],"cmyk":[0,22,26,0],"hsb":[9,26,100],"hsl":[9,97,86],"lab":[84,19,13]},{"name":"Pale Pink","hex":"fcd5ce","rgb":[252,213,206],"cmyk":[0,15,18,1],"hsb":[9,18,99],"hsl":[9,88,90],"lab":[88,13,9]},{"name":"Misty Rose","hex":"fae1dd","rgb":[250,225,221],"cmyk":[0,10,12,2],"hsb":[8,12,98],"hsl":[8,74,92],"lab":[91,8,5]},{"name":"Isabelline","hex":"f8edeb","rgb":[248,237,235],"cmyk":[0,4,5,3],"hsb":[9,5,97],"hsl":[9,48,95],"lab":[95,3,2]},{"name":"Platinum","hex":"e8e8e4","rgb":[232,232,228],"cmyk":[0,0,2,9],"hsb":[60,2,91],"hsl":[60,8,90],"lab":[92,-1,2]},{"name":"Alabaster","hex":"d8e2dc","rgb":[216,226,220],"cmyk":[4,0,3,11],"hsb":[144,4,89],"hsl":[144,15,87],"lab":[89,-4,2]},{"name":"Linen","hex":"ece4db","rgb":[236,228,219],"cmyk":[0,3,7,7],"hsb":[32,7,93],"hsl":[32,31,89],"lab":[91,1,5]},{"name":"Champagne Pink","hex":"ffe5d9","rgb":[255,229,217],"cmyk":[0,10,15,0],"hsb":[19,15,100],"hsl":[19,100,93],"lab":[93,7,9]},{"name":"Peach Puff","hex":"ffd7ba","rgb":[255,215,186],"cmyk":[0,16,27,0],"hsb":[25,27,100],"hsl":[25,100,86],"lab":[89,10,20]},{"name":"Peach Crayola","hex":"fec89a","rgb":[254,200,154],"cmyk":[0,21,39,0],"hsb":[28,39,100],"hsl":[28,98,80],"lab":[84,13,30]}]
 
 let MediaBundle = class {
   constructor(name, index, x, y, w, h) {
@@ -69,6 +64,8 @@ let MediaBundle = class {
       particles: this.name + "_particles",
       tab: this.name + "_tab",
       rename: this.name + "_rename",
+      renameLabel: this.name + "_renameLabel",
+      renameButton: this.name + "_renameButton",
       objTabs: []
     };
 
@@ -140,14 +137,14 @@ let MediaBundle = class {
       let path = URL.createObjectURL(files[i]);
 
       this.createObject(files[i], name, path);
-
+    //  this.createObjUI(files[i], name, path)
 
     }
 
-    this.updateUI(files.length);
+  //  this.updateUI(files.length);
 
     logMB(files.length, "newObj");
-    this.fileInput.value = '';
+  //  this.fileInput.value = 'uhhh';
   }
 
   loadMedia(list) {
@@ -178,9 +175,14 @@ let MediaBundle = class {
 
       editClone.querySelector("img").setAttribute("src", `${this.objects[i].path}` )
 
+      editClone.querySelector("label").id = this.ui.renameLabel;
+      editClone.querySelector("label").setAttribute("for", this.ui.rename)
+
       editClone.querySelector("input").id = this.ui.rename;
       editClone.querySelector("input").setAttribute("value", "rename" )
-      editClone.querySelector("button").setAttribute("onclick", `updateName(${this.objects[i].name})`);
+
+      editClone.querySelector("button").id = this.ui.renameButton;
+      editClone.querySelector("button").setAttribute("onclick", `this.updateName(${this.objects[i].name})`);
 
   //    editClone.querySelector("input").setAttribute("onchange", `${this.updateName(this.value)}` )
 
@@ -196,11 +198,6 @@ let MediaBundle = class {
   }
 
 
- updateName(name){
-   this.name = name;
-   console.log("name is updated " + this.name);
-
- }
 
   destructor() {
     document.getElementById(this.ui.module).remove();
@@ -212,9 +209,8 @@ let MediaBundle = class {
   createObject(file, name, path) {
     let b = new MediaObject(file, name, path);
     this.objects.push(b);
-
-
   }
+
   get position() {
     return (this.x, this.y);
   }
@@ -452,38 +448,6 @@ released() {
 
 
 
-//trigger drag for given bundle
-function mouseDragged() {
-  for (i = 0; i < mediaBundles.length; i++) {
-    mediaBundles[i].pressed();
-      return false;
-  }
-
-}
-
-function mouseClicked() {
-
-}
-// here are some dragging fucntions (releases all objects when mouse up) and also click to cycle through objects
-function mouseReleased() {
-  for (i = 0; i < mediaBundles.length; i++) {
-//if the mouse is over the bundle and it is not being dragged, rotate-shift the mediaobject array
-  if (mediaBundles[i].rollover) {
-        if (mediaBundles[i].dragging == false) {
-            mediaBundles[i].objects.unshift(mediaBundles[i].objects.pop());
-          }
-          }
-
-  }
-
-  for (i = 0; i < mediaBundles.length; i++) {
-          //release all bundles from this.dragging
-          mediaBundles[i].released();
-  }
-}
-
-
-
 
 
 
@@ -509,22 +473,6 @@ function createMB() {
     logMB(b.name, "created"); //creates notice for the log
   }
 }
-
-
-let MediaObject = class {
-  constructor(file, name, path, varName) {
-    this.name = name;
-    this.path = path;
-    this.type;
-    this.width;
-    this.height;
-    this.file = file;
-    this.offset = [random(200) - 100, random(200) - 100];
-    this.img = loadImage(path);
-  }
-}
-
-let s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
 // Click and Drag an object
 // Daniel Shiffman <http://www.shiffman.net>
