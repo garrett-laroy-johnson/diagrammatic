@@ -28,7 +28,7 @@ let MediaBundle = class {
     this.header = true;
     this.aura = {
       circum: 2 * this.w
-    }
+    },
     this.gradient = false;
     this.particles = {
       active: false,
@@ -42,13 +42,6 @@ let MediaBundle = class {
       x: [],
       y: []
     };
-
-
-  }
-
-
-  createUI() {
-
     this.ui = {
       // set IDs for HTML DOM elements that need JS interaction
       module: this.name + "_module",
@@ -68,6 +61,11 @@ let MediaBundle = class {
       renameButton: this.name + "_renameButton",
       objTabs: []
     };
+
+  }
+
+
+  createUI() {
 
 
     let clone = mbEdit.content.cloneNode(true);
@@ -140,75 +138,18 @@ let MediaBundle = class {
     //  this.createObjUI(files[i], name, path)
 
     }
-
-  //  this.updateUI(files.length);
-
-    logMB(files.length, "newObj");
-  //  this.fileInput.value = 'uhhh';
-  }
-
-  loadMedia(list) {
-    for (i = 0; i < list.length; i++) {
-
-
-    }
-  }
-
-
-  updateUI(length) {
-    // clone new tab
-    let t = document.getElementById(this.ui.tab);
-
-    // create reference for nav container
-    let parentNav = document.getElementById(this.ui.nav);
-
-   // get template editor code; NOTE: this is generic and will need to change for different media types;
-    let tEdit = document.getElementById("objPaneImg");
-    let editParent = document.getElementById("myTabContent");
-    // iterate through new files and create tabs for them.
-    for (i = 0; i < length; i++) {
-      let clone = t.cloneNode(true);
-      clone.id = `${this.name}_objTabs_${i}`;
-
-      let editClone = tEdit.cloneNode(true);
-      editClone.id = `${this.name}_objTabEditor_${i}`;
-
-      editClone.querySelector("img").setAttribute("src", `${this.objects[i].path}` )
-
-      editClone.querySelector("label").id = this.ui.renameLabel;
-      editClone.querySelector("label").setAttribute("for", this.ui.rename)
-
-      editClone.querySelector("input").id = this.ui.rename;
-      editClone.querySelector("input").setAttribute("value", "rename" )
-
-      editClone.querySelector("button").id = this.ui.renameButton;
-      editClone.querySelector("button").setAttribute("onclick", `this.updateName(${this.objects[i].name})`);
-
-  //    editClone.querySelector("input").setAttribute("onchange", `${this.updateName(this.value)}` )
-
-
-      let link = clone.querySelector("button");
-
-      link.setAttribute("data-bs-target", `#${this.name}_objTabEditor_${i}`);
-      link.innerHTML = `${this.objects[i].name}`;
-
-      parentNav.appendChild(clone);
-      editParent.appendChild(editClone);
-    }
-  }
-
-
+}
 
   destructor() {
     document.getElementById(this.ui.module).remove();
-    //div.remove();
-    //mediaBundles.splice(this.index,1)
     delete mediaBundles(this.index);
   }
 
   createObject(file, name, path) {
-    let b = new MediaObject(file, name, path);
+    let type = "image";
+      let b = new MediaObject(file, name, path, type);
     this.objects.push(b);
+    b.createObjUI(this.index);
   }
 
   get position() {

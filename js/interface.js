@@ -2,6 +2,7 @@
 
 let width = window.innerWidth;
 let height = window.innerHeight;
+let viewState = "editor"
 
 //HTML edit editor interface template reference
 const mbEdit = document.getElementById("mbModel"); // creates interface editor
@@ -19,6 +20,8 @@ function changeTab (dest) {
     let m = document.getElementById("main").children;
     let s = document.getElementById("sandbox").children;
     let c = document.getElementById("diaContainer");
+
+    viewState = dest;
 
   switch (dest)  {
   case 'sandbox':
