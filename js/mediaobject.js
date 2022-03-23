@@ -8,7 +8,7 @@ let MediaObject = class {
     this.file = file;
     this.offset = [random(200) - 100, random(200) - 100];
     this.img = loadImage(path);
-    this.gui = createGui(`${this.name}`)
+    this.gui = createGui(`${this.name}`);
 
     this.params = {
        // image scale

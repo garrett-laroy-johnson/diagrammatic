@@ -8,20 +8,22 @@ let randomWordsURL  = "https://api.wordnik.com/v4/words.json/randomWords?hasDict
 
 
 function getPhrase(){
-  loadJSON(randomWordsURL, gotData);
-
+  fetch(randomWordsURL)
+    .then(response => response.json())
+    .then(json => gotData(json))
+    .then(name => createMB(name))
+    .catch(err => console.log(err));
 }
+
 
 
  function gotData(data){
    let word1 = data[0].word;
    let word2 = data[1].word;
    phrase = word1 + " " + word2;
-  inputName = prompt("enter MB name.", phrase);
+   inputName = prompt("enter MB name.", phrase);
+   return inputName;
  }
-
-
-
 
 //created by Daniel Schiffman
 //https://editor.p5js.org/shiffman/sketches/rkJCfiSJx
