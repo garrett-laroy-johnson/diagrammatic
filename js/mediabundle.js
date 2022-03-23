@@ -1,3 +1,29 @@
+
+function getName(){
+  // gets clever words and uses them as stock/default text for prompt;
+  getPhrase(get, createMB);
+
+  //check for duplicates
+
+}
+
+
+
+function createMB() {
+    console.log(inputName);
+  if (checkName(inputName, "mediaBundle")) {
+  //  logMB(inputName, "duplicate"); //creates notice for the log
+  } else {
+
+
+  }
+  let b = new MediaBundle(inputName, mediaBundles.length, (width / 2), (height / 2), 200, 200); //creates new JSON
+  mediaBundles.push(b); //adds name of JSON to list of bundles
+
+
+}
+
+
 //array containing all mediaBundles;
 let mediaBundles = [];
 
@@ -390,30 +416,25 @@ released() {
 
 
 
-
-
-
-
-
-
-
-function createMB() {
-  //grab + process name
-  let inputName = document.getElementById("newMBname").value; //grab the input from the form
-  inputName = inputName.replace(/\s/g, "_"); //remove spaces, add underscore
-  //check for duplicates
-  if (checkName(inputName, "mediaBundle")) {
-    logMB(inputName, "duplicate"); //creates notice for the log
-  } else {
-    let b = new MediaBundle(inputName, mediaBundles.length, (width / 2), (height / 2), 200, 200); //creates new JSON
-    mediaBundles.push(b); //adds name of JSON to list of bundles
-    updateIndex();
-    b.createUI();
-
-    //showMB(inputName);
-    logMB(b.name, "created"); //creates notice for the log
-  }
+//check to see if name is a repeat.
+  function checkName (name, type){
+    switch (type) {
+      case "mediaBundle":
+        return mediaBundles.some(e => e.name === name);
+        break;
+      case "mediaObject":
+        return false;
+        console.log("checkName function isn't set up to check media Object names as mediaObjects haven't been implimented yet. gives default false, allowing for duplicate.");
+        break;
+      }
 }
+
+
+
+
+
+
+
 
 // Click and Drag an object
 // Daniel Shiffman <http://www.shiffman.net>
