@@ -25,8 +25,8 @@ function createMB(name) {
   mediaBundles.push(b); //adds name of JSON to list of bundles
 }
 
-createObject(file, name, path) {
+function createObject(file, name, path) {
   let type = "image";
   let b = new MediaObject(file, name, path, type);
-  this.objects.push(b);
+//  this.objects.push(b);
 }

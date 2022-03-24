@@ -16,7 +16,7 @@ let MediaBundle = class {
     this.rollover = false; // Is the mouse over the ellipse?
     this.editing = false;
     //  this.filter = (BLUR, 0);
-
+   this.gui;
     this.params = {
 
       //interface/style options on off
@@ -25,32 +25,26 @@ let MediaBundle = class {
       headerBGColor: [0, 0, 0],
 
       headerTextSize: 30,
-      // headerTextSizeMin: 12,
-      // headerTextSizeMax: 400,
-
+      headerTextFont: "monospace",
 
       bgBox: true,
       scramble: true,
-      halo: true,
+      scatter: true,
 
-      // image scale
-      scale: 1.0,
-      scaleMin: 0.1,
-      scaleMax: 5,
-      scaleStep: 0.1,
-
-      addMediaObject: false
     };
     this.buildGUI();
   }
 
   buildGUI() {
-    QuickSettings.create(5, 5, `${this.name}`)
-      .bindRange("startAngle", -360, 360, arc.startAngle, 1, arc)
-      .bindRange("sweepAngle", -360, 360, arc.sweepAngle, 1, arc)
-      .bindRange("rad_x", 0, 480, arc.rad_x, 1, arc)
-      .bindRange("rad_y", 0, 480, arc.rad_y, 1, arc)
+   this.gui =  QuickSettings.create(5, 5, `${this.name}`)
+
+      .bindBoolean("scatter", false, this.params)
+      .bindBoolean("scramble", false, this.params)
       .bindBoolean("header", true, this.params)
+      .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
+      .bindColor("headerBGColor", "white", this.params)
+      .bindColor("headerTextColor", "black", this.params)
+      .bindRange("headerTextSize", 6, 200, 30, 1, this.params)
       .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile)
   }
 
@@ -117,6 +111,7 @@ let MediaBundle = class {
       rectMode(CORNER);
       noStroke();
       fill(this.params.headerBGColor);
+      textFont(this.params.headerTextFont);
       textSize(this.params.headerTextSize);
       rect(this.x, this.y, this.w, this.params.headerTextSize + textDescent());
       fill(this.params.headerTextColor);
@@ -126,7 +121,7 @@ let MediaBundle = class {
 
 
 
-    if (this.params.scramble && this.params.halo) {
+    if (this.params.scramble && this.params.scatter) {
 
 
       for (let m = 0; m < this.objects.length; m++) {
@@ -143,7 +138,7 @@ let MediaBundle = class {
       for (let m = 0; m < this.objects.length; m++) {
         image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.w, this.h);
       }
-    } else if (this.halo) {
+    } else if (this.scatter) {
       for (let m = 0; m < this.objects.length; m++) {
         let angle = Math.PI * 2 / this.objects.length;
         let xPos = this.x + cos(angle * m) * 200;
