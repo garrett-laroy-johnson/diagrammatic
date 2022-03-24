@@ -12,7 +12,7 @@ function getPhrase(){
     .then(response => response.json())
     .then(json => gotData(json))
     .then(name => createMB(name))
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
 }
 
 
@@ -22,7 +22,7 @@ function getPhrase(){
    let word2 = data[1].word;
    phrase = word1 + " " + word2;
    inputName = prompt("enter MB name.", phrase);
-   return inputName;
+   return inputName
  }
 
 //created by Daniel Schiffman

@@ -18,15 +18,15 @@ let MediaObject = class {
         scaleStep: 0.1,
 
         //offset
-        offsetY : [random(200) - 100, random(200) - 100],
-        offsetYMin : 0,
-        offsetYMax: 1000,
-        offsetYStep: 1,
+        offsetY : int(random(200) - 100),
+        offsetYMin : 0.0,
+        offsetYMax: 1000.0,
+        offsetYStep: 1.0,
 
-        offsetX : [random(200) - 100, random(200) - 100],
+        offsetX : int(random(200) - 100),
         offsetXMin : 0,
         offsetXMax: 1000,
-        offsetXStep: 1,
+        offsetXStep: 1.0,
     }
     this.buildGUI = function () {
       this.gui.addObject(this.params);

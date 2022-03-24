@@ -13,13 +13,8 @@
 }
 
 
-
 function createMB(name) {
-    console.log(name);
   if (checkName(name, "mediaBundle")) {
-
-
-
       let input =  function() { prompt("There is already a MediaBundle called " + name + ". Please enter a new name.", phrase);
         return input;
     }
@@ -30,6 +25,8 @@ function createMB(name) {
   mediaBundles.push(b); //adds name of JSON to list of bundles
 }
 
-function getFile(){
-  prompt("getfile")
+createObject(file, name, path) {
+  let type = "image";
+  let b = new MediaObject(file, name, path, type);
+  this.objects.push(b);
 }

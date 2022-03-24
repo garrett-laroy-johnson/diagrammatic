@@ -35,6 +35,9 @@ function keyPressed() {
   if (key == "n") {
     getPhrase(); //get name and then chain to "createMB"
   }
+  if(key == "w"){
+    writeDiagram();
+  }
 
 
   // let o = new MediaObject("file", "this", "www", "image");
@@ -45,8 +48,7 @@ function keyPressed() {
 function mousePressed() {
   for (i = 0; i < mediaBundles.length; i++) {
     mediaBundles[i].pressed();
-    return false;
-  }
+    }
 
 }
 //
