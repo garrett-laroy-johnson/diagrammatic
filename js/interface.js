@@ -77,3 +77,12 @@ function mouseReleased() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
+
+function playTone(){
+  let midiValue = 40;
+   let freqValue = midiToFreq(midiValue);
+   osc.freq(freqValue);
+
+   envelope.play(osc, 0, 0.1);
+}

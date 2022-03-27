@@ -1,15 +1,11 @@
 let MediaObject = class {
-  constructor(file, name, path, type) {
+  constructor(file, name)  {
     this.name = name;
-    this.path = path;
-    this.type = type;
     this.width;
     this.height;
     this.file = file;
     this.offset = [random(200) - 100, random(200) - 100];
-    this.img = loadImage(path);
     this.gui = createGui(`${this.name}`);
-
     this.params = {
        // image scale
         scale : 1.0,
@@ -34,3 +30,30 @@ let MediaObject = class {
 
   }
 }
+
+class ImageObject extends MediaObject {
+  constructor(file, name, img) {
+    super(file, name);
+    this.name = name;
+    this.width;
+    this.height;
+    this.file = file;
+    this.gui;
+    this.params = {
+   // image scale
+    scale: 100,
+    //offset
+    offsetY : int(random(200) - 100),
+    offsetX : int(random(200) - 100),
+    }
+    this.img = img; // before it was loadImage(path);
+    this.buildGUI();
+    }
+    buildGUI() {
+     this.gui =  QuickSettings.create(5, 5, `${this.name}`)
+      .bindRange("scale", 0, 200, 1, 1, this.params)
+      .bindRange("offsetX",-200,200, 0, 1, this.params)
+      .bindRange("offsetY",-200,200, 0, 1, this.params)
+
+  }
+  }

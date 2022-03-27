@@ -16,13 +16,29 @@ function getPhrase(){
 }
 
 
+function grabPhrase(file){
+  fetch(randomWordsURL)
+    .then(response => response.json())
+    .then(json => getData(json))
+    .then(name => createMB(name))
+    .catch(err => console.log(err))
+}
+
+// for when not prompting
+function getData(data){
+  let word1 = data[0].word;
+  let word2 = data[1].word;
+  phrase = word1 + " " + word2;
+   return inputName;
+}
+
 
  function gotData(data){
    let word1 = data[0].word;
    let word2 = data[1].word;
    phrase = word1 + " " + word2;
    inputName = prompt("enter MB name.", phrase);
-   return inputName
+   return inputName;
  }
 
 //created by Daniel Schiffman

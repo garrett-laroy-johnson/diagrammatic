@@ -21,12 +21,25 @@ function createMB(name) {
         .then(input => createMB(input));
   } else {
   }
-  let b = new MediaBundle(inputName, mediaBundles.length, (width / 2), (height / 2), 200, 200); //creates new JSON
-  mediaBundles.push(b); //adds name of JSON to list of bundles
+  inputName = new MediaBundle(inputName, mediaBundles.length); //creates new JSON
+  mediaBundles.push(inputName); //adds name of JSON to list of bundles
+  console.log(mediaBundles);
+ return name;
 }
 
-function createObject(file, name, path) {
-  let type = "image";
-  let b = new MediaObject(file, name, path, type);
-//  this.objects.push(b);
-}
+
+function gotFile(file){
+  let numBunds = 0;
+  for (let bund of mediaBundles){
+    if (bund.rollover){
+     bund.handleFile(file);
+     numBunds++;
+    }
+   }
+   if (!numBunds){
+     grabPhrase(file);
+     //let bun = mediaBundles.length - 1; //get index of new media bundle
+    // console.log(bun);
+  //   bun.handleFile(file);
+     }
+   }
