@@ -1,137 +1,26 @@
-<html>
+<html lang="en">
 
 <head>
-  <script src="js/libraries/p5.js"></script>
+  <script src="js/libraries/quicksettings.js"></script>
+  <script src="js/libraries/dat.gui.js"></script>
+  <script src="js/wordnik.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+<script src="js/libraries/p5.dom.js"></script>
+<script src="js/libraries/p5.sound.js"></script>
   <script src="js/libraries/p5.gui.js"></script>
-    <script src="js/libraries/quicksettings.js"></script>
   <script src="js/readwrite.js"></script>
-  <script src="js/testing.js"></script>
-  <script src="js/playground.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.patgrad/p5.patgrad.js"></script>
   <script src="js/mediabundle.js"></script>
-    <script src="js/mediaobject.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script src="js/mediaobject.js"></script>
+  <script src="js/interface.js"></script>
+  <script src="js/create.js"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
 </head>
 
 <body>
-  <div class="container" id = "diaContainer">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
-          <use xlink:href="#bootstrap" /></svg>
-        <span class="fs-4">diagrammatic</span>
-      </a>
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page" onclick='changeTab("editor")' id="editorTab">Editor</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" aria-current="page" onclick='changeTab("sandbox")' id="sandboxTab">Sandbox</a></li>
-      </ul>
-    </header>
-    <div class="input-group mb-3 row" id="mbFactory">
-      <div class=col>
-        <input type="text" class="form-control" placeholder="new media bundle name" name="newMBname" id="newMBname">
-        <button class="btn btn-outline-secondary" type="button" onclick="createMB()">Create</button>
-        <button class="btn btn-outline-secondary" type="button" onclick="writeDiagram()">Write Diagram</button>
-        <button class="btn btn-outline-secondary" type="button" onclick="readDiagram()">Read Diagram</button>
-        <div id="MBCreateOutput">
-        </div>
-      </div>
-    </div>
-
-
-
-
-    <div class="input-group mb-3 row">
-      <div class="row mb-12" id="main">
-
-
-
-        <template id="mbModel">
-          <div class="mb col-12 card text-center">
-
-
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                  <button class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">+</button>
-                </li>
-
-                <li id="objTab" class="nav-item">
-                  <button class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#test" type="button" role="tab"></button>
-                </li>
-              </ul>
-            </div>
-
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="add" role="tabpanel" aria-labelledby="add">
-              <div id="objEditorAddModel" class="card-body row" style="text-align:left">
-                <div class="col-9">
-                  <div class="input-group">
-                    <input type="file" class="form-control" id="fileGrab" aria-describedby="inputGroupFileAddon04" aria-label="Upload" multiple>
-                    <button class="btn btn-outline-secondary" type="button" id="fileGrabButton">Add Media Object(s)</button>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Stack Objects</label>
-                    <input class="form-check-input" type="checkbox" id="stackObjects" onclick="toggleStack()">
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Scramble object placement</label>
-                    <input class="form-check-input" type="checkbox" id="scrambleObjects" onclick="toggleScramble()" checked>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Display Header</label>
-                    <input class="form-check-input" type="checkbox" id="displayHeader" onclick="toggleHeader()" checked>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Display Gradient</label>
-                    <input class="form-check-input" type="checkbox" id="displayGradient" onclick="toggleGradient()">
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Display Particles</label> <input class="form-check-input" type="checkbox" id="displayParticles" onclick="toggleParticles()">
-                  </div>
-                </div>
-
-              </div>
-              <div class="mb-footer row">
-                <div class="col-9">
-                  <h3 style="text-align:left">
-                  </h3>
-                </div>
-                <div class="col-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" margin-top="5px" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                    <path fill-rule="evenodd"
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-             <div class="tab-pane fade" id="objPane" role="tabpanel" aria-labelledby="test">
-               <div class = "row">
-                 <div class = "col-3 mediaPane" id = "">
-                   <!-- <img class = "img-fluid img-thumbnail"> -->
-                </div>
-                <div class = "col-9 ctrlPane" id = "">
-
-                </div>
-               </div>
-             </div>
-          </div>
-
-        </template>
-
-      </div>
-      <div class="row" id="sandbox">
-      </div>
-    </div>
-    <script src="js/interface.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="js/sketch.js"></script>
 </body>
 
 </html>

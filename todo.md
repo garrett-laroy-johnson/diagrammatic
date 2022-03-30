@@ -1,10 +1,11 @@
 # Diagrammatic To-do's
-## Editor interface
-1. Generate tabs for new media objects with parameterization options✅
+## QuickSettings interface
+1. Generate QuickSettings Panels for new media objects with parameterization options✅
 2. create rename object function
 3. create delete object function
 4. create rescale function
 5. display image
+6.  create rename bundle function (maybe this means deleting and recreating);
 
 
 ## Media types
@@ -12,22 +13,30 @@ Add (2) media types to Diagrammatic:
 1. Text
 2. Video
 
+## Images
+1. get aspect ratio of image uploads
+2. implement scale -- somehow the quicksettings is fucked;
+3. implement rotate
+4. need to square scramble + scatter display modes
+5. adaptive background square (goes to extreme x and y points)
 ## Fiducial Markers
 1. Implemented
 2. Toggle on/off somehow
 
 ## Read/Write
 
-## Github compatability & documentation
+## Github compatibility & documentation
 
 ## Sandbox
 1. Toggle off bootstrap grid margins✅
-2. floating parameter menus
+2. floating parameter menus✅
 3. Create full window canvas
+4. create HUD
 
 
 #Coding log
 3.16.22 // left project with rename object function half working. Need to connect Button click to updateName() function.
 3.17.22 // OK, started moving rename and tab generation to mediaobject.js as media object functions. makes more sense anyway...
 3.18.22 // line 44 in media object --- working to add DOM elements to specifics isntances instead of the template....
-3/19/22 // Got DOM elements adding as part of mediaobject Object. However rename input is not working as desired. 
+3/19/22 // Got DOM elements adding as part of mediaobject Object. However rename input is not working as desired.
+3/26/22 // adaptive background?

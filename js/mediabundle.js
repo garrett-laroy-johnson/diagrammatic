@@ -2,155 +2,78 @@
 let mediaBundles = [];
 
 let MediaBundle = class {
-  constructor(name, index, x, y, w, h) {
+  constructor(name, index) {
     this.name = name;
-    this.x = x;
-    this.w = w;
-    this.h = h;
-    this.y = y;
-    this.center = [x + (w / 2), y + (h / 2)];
+    this.x = width / 2;
+    this.y = height / 2;
+    this.w = 400;
+    this.h = 400;
     this.index = index;
     this.marker;
     this.objects = [];
-    this.ui = {};
-    this.bgBox = true;
-    this.fileInput;
     this.fileList = [];
-    this.fileVars = [];
-    this.index;
-    this.scramble = true;
-    this.halo = true;
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
     this.editing = false;
     //  this.filter = (BLUR, 0);
-    this.img = [];
-    this.header = true;
-    this.aura = {
-      circum: 2 * this.w
-    },
-    this.gradient = false;
-    this.particles = {
-      active: false,
-      number: 20,
-      scale: .5,
-      palette: ['#fec5bb', '#fcd5ce', '#fcd5ce', '#fcd5ce', '#e8e8e4', '#d8e2dc', '#ece4db', '#ffe5d9', '#ffd7ba', '#fec89a'],
-      speed: {
-        x: 2,
-        y: 2
-      },
-      x: [],
-      y: []
-    };
-    this.ui = {
-      // set IDs for HTML DOM elements that need JS interaction
-      module: this.name + "_module",
-      title: this.name + "_title",
-      scramble: this.name + "_scramble",
-      trash: this.name + "_trash",
-      fileGrab: this.name + "_fileGrab",
-      fileGrabButton: this.name + "_fileGrabButton",
-      nav: this.name + "_nav",
-      header: this.name + "_header",
-      gradient: this.name + "_gradient",
-      stack: this.name + "_stack",
-      particles: this.name + "_particles",
-      tab: this.name + "_tab",
-      rename: this.name + "_rename",
-      renameLabel: this.name + "_renameLabel",
-      renameButton: this.name + "_renameButton",
-      objTabs: []
-    };
+    this.gui;
+    this.params = {
 
+      //interface/style options on off
+      header: true,
+      headerTextColor: [255, 255, 255],
+      headerBGColor: [0, 0, 0],
+
+      headerTextSize: 30,
+      headerTextFont: "monospace",
+
+      bgBox: true,
+      bgBoxColor: [0, 0, 0],
+
+      scramble: true,
+      scatter: true,
+
+    };
+    this.buildGUI();
   }
 
-
-  createUI() {
-
-
-    let clone = mbEdit.content.cloneNode(true);
-    //set HTML module ID, create onclick behavior to trigger editing selector styling
-    clone.querySelector("div").id = this.ui.module;
-    clone.querySelector("div").setAttribute("onclick", `editing(${this.ui.module})`);
-    // set header module, create onclick behavior to change object state
-    clone.getElementById("displayHeader").id = this.ui.header;
-    clone.getElementById(this.ui.header).setAttribute("onclick", `mediaBundles[${this.index}].toggleHeader()`);
-    // set particles module, create onclick behavior to change object state
-    clone.getElementById("displayParticles").id = this.ui.particles;
-    clone.getElementById(this.ui.particles).setAttribute("onclick", `mediaBundles[${this.index}].toggleParticles()`);
-
-    // set particles module, create onclick behavior to change object state
-    clone.getElementById("scrambleObjects").id = this.ui.scramble;
-    clone.getElementById(this.ui.scramble).setAttribute("onclick", `mediaBundles[${this.index}].toggleScramble()`);
-
-    // set particles module, create onclick behavior to change object state
-    clone.getElementById("stackObjects").id = this.ui.stack;
-    clone.getElementById(this.ui.stack).setAttribute("onclick", `mediaBundles[${this.index}].toggleStack()`);
-
-
-
-
-    // set header module, create onclick behavior to change object state
-    clone.getElementById("displayGradient").id = this.ui.gradient;
-    clone.getElementById(this.ui.gradient).setAttribute("onclick", `mediaBundles[${this.index}].toggleGradient()`);
-
-    // set trash module, create onclick behavior to trigger destructor()
-    clone.querySelector("svg").id = this.ui.trash;
-    clone.querySelector("svg").setAttribute("onclick", `mediaBundles[${this.index}].destructor()`);
-
-    //display unique mediabundle name, give it a DOM ID if need to change it.
-    clone.querySelector("h3").id = this.ui.title;
-    clone.getElementById(this.ui.title).textContent = this.name;
-    //clone inputs
-
-    clone.getElementById("fileGrab").id = this.ui.fileGrab;
-
-    clone.getElementById("objTab").id = this.ui.tab;
-
-
-    clone.getElementById("fileGrabButton").id = this.ui.fileGrabButton;
-
-    clone.getElementById(this.ui.fileGrabButton).setAttribute("onClick", `mediaBundles[${this.index}].handleFile()`);
-
-    //clone.getElementById(this.ui.input).addEventListener("change", this.handleFile);
-
-    clone.querySelector("ul").id = this.ui.nav;
-    main.appendChild(clone);
-
+  buildGUI() {
+   this.gui =  QuickSettings.create(5, 5, `${this.name}`)
+      .bindText("name", `${this.name}`, this)
+      .bindBoolean("header", true, this.params)
+      .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
+      .bindColor("headerBGColor", "#ffffff", this.params)
+      .bindColor("headerTextColor", "#000000", this.params)
+      .bindRange("headerTextSize", 6, 200, 30, 1, this.params)
+      .bindBoolean("bgBox", true, this.params)
+      .bindColor("bgBoxColor", "#000000", this.params)
+    //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
+      .bindBoolean("scatter", false, this.params)
+      .bindBoolean("scramble", false, this.params)
   }
 
-  //this function handles ADD MEDIA OBJECT file inputs
-
-  // it's also loading images right now, and assuming that all inputs are images
-  handleFile() {
-    // assign the files to the object key
-    this.fileInput = document.getElementById(this.ui.fileGrab);
+  //
+  // //this function handles ADD MEDIA OBJECT file inputs
+  handleFile(file) {
     // parse out the files
-    let files = this.fileInput.files;
     // get info to make a mediaObject
-    for (i = 0; i < files.length; i++) {
+     let obj;
+      let name = file.name.split(' ')
+      name = name[0];
 
-      let name = files[i].name.split(' ')[0]
+        if (file.type === 'image') {
+          let img = createImg(file.data).hide();
+          obj = new ImageObject(file, name, img);
+        }
 
-      let path = URL.createObjectURL(files[i]);
+  console.log(obj);
+  this.objects.push(obj);
 
-      this.createObject(files[i], name, path);
-    //  this.createObjUI(files[i], name, path)
-
-    }
-}
+  }
 
   destructor() {
-    document.getElementById(this.ui.module).remove();
     delete mediaBundles(this.index);
-  }
-
-  createObject(file, name, path) {
-    let type = "image";
-      let b = new MediaObject(file, name, path, type);
-    this.objects.push(b);
-    b.createObjUI(this.index);
-  }
+  };
 
   get position() {
     return (this.x, this.y);
@@ -158,262 +81,127 @@ let MediaBundle = class {
 
   over() {
     // Is mouse over object
-    if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
-      this.rollover = true;
-    } else {
-      this.rollover = false;
+
+      if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+        this.rollover = true;
+      } else {
+        this.rollover = false;
+      }
     }
-  }
 
   update() {
+
+    if(this.addMediaObject){
+      this.addMediaObject=false;
+      this.newObject();
+    }
+
     // Adjust location if being dragged
     if (this.dragging) {
       this.x = mouseX + this.offsetX;
-      this.y = mouseY + this.offsetY;
-      for (let i = 0; i < this.particles.number; i++) {
-        this.particles.y[i] = this.offsetY + mouseY;
-        this.particles.x[i] = this.offsetX + mouseX;
-      }
-      push();
-      ellipseMode(CORNER);
-      strokeWeight (10);
-      stroke(0,255,255);
-      noFill();
-      circle(this.x, this.y, this.w, this.h);
-
-      pop();
-
+      this.y = mouseY + this.offsetY
     }
-  }
-
+  };
   show() {
 
-    if (this.bgBox){
-
-    }
-
-
-
-    if (this.gradient) {
-      //let h = random(0, 360);
+    if (this.params.bgBox) {
       push();
-      noStroke();
-      let circum = this.w * 2;
-      for (let r = circum; r > 0; --r) {
-        fill((r / circum) * 255);
-        ellipse(this.x + (this.w / 2), this.y + (this.h / 2), r, r);
-      }
-      pop();
-    }
-
-    if (this.particles.active) {
-      let circum = this.particles.scale * this.w;
-      let rad = circum / 2;
-      let c;
-      //init x and y
-
-      //iterate across particles color per palette
-      for (let i = 0; i < this.particles.number; i++) {
-
-        if (i < this.particles.palette.length) {
-          c = color(this.particles.palette[i]);
-        } else {
-          c = color(this.particles.palette[i % this.particles.palette.length]);
-        }
-
-        //draw gradient
-        for (let w = circum; w > 0; --w) {
-          noFill();
-          strokeWeight(1);
-          c.setAlpha(255 - (w / circum) * 255);
-          stroke(c);
-          circle(this.particles.x[i], this.particles.y[i], w);
-        }
-        //move particle
-        this.particles.x[i] += this.particles.speed.x;
-        this.particles.y[i] += this.particles.speed.y;
-        //sensewalls
-
-        if (this.particles.x[i] > this.x + this.w - rad || this.particles.x[i] < rad) {
-          this.particles.speed.x = -this.particles.speed.x;
-        }
-        if (this.particles.y[i] > this.y + this.h - rad || this.particles.y[i] < rad) {
-          this.particles.speed.y = -this.particles.speed.y;
-        }
+      noFill();
+      rectMode(CORNER);
+      if (this.rollover){
+        stroke("#FFA0FD");
       }
 
+      else{
+        stroke(this.params.bgBoxColor);
+      }
+      strokeWeight(8);
+      rect(this.x, this.y, this.w, this.h)
+      pop()
     }
-
-    if (this.header) {
+    if (this.params.header) {
       let head = this.name;
       push();
-      fill(0);
-      rect(this.x, this.y - 20, 200, 10);
-      //stroke(255);
-      fill(255);
-      text(head, this.x, this.y - 10);
-      pop();
-    }
-    // if (this.img) {
-    //   image(this.img, this.x,this.y, this.w, this.h);
-    // }
-    else {
-if (this.dragging){
-  push();
-  noStroke()
-  fill(255,0,0);
-  rect(this.x, this.y, 200, 200);
+      rectMode(CORNER);
+      noStroke();
 
-  pop();
-}
-else {
+      fill(this.params.headerBGColor);
 
-      push();
-      rect(this.x, this.y, 200, 200);
-      stroke(0);
-      pop();
-      //  text(s, this.x, this.y, 200, 200);
-}
+      textFont(this.params.headerTextFont);
+      textSize(this.params.headerTextSize);
+      rect(this.x, this.y, this.w, this.params.headerTextSize + textDescent());
+      fill(this.params.headerTextColor);
+      text(head, this.x, this.y + textAscent());
+      pop()
     }
 
-    // Different fill based on state
-    // if (this.fileVars.length>0){
 
 
-    imageMode(CORNER);
-    if (this.scramble && this.halo) {
-
+    if (this.params.scramble && this.params.scatter) {
+      let xPos = this.x;
+      let yPos = this.Y
 
       for (let m = 0; m < this.objects.length; m++) {
-
+        push();
         let angle = Math.PI * 2 / this.objects.length;
 
-        let xPos = this.x + cos(angle * m) * 200;
-        let yPos = this.y - sin(angle * m) * 200;
+        let xPos = this.x + this.objects[m].params.offsetX + cos(angle * m) * 200
+        let yPos = this.y + this.objects[m].params.offsetY - sin(angle * m) * 200;
 
-
-        image(this.objects[m].img, xPos + this.objects[m].offset[0], yPos + this.objects[m].offset[1], this.w, this.h);
-
+        imageMode(CORNER);
+        translate(xPos, yPos)
+        scale(this.objects[m].params.scale/100;);
+        image(this.objects[m].img, 0, 0, this.w, this.h);
+        pop();
       }
-
-
-
-
-    } else if (this.scramble) {
+    } else if (this.params.scramble) {
       for (let m = 0; m < this.objects.length; m++) {
         image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.w, this.h);
       }
-    } else if (this.halo) {
-
-
-
+    } else if (this.scatter) {
       for (let m = 0; m < this.objects.length; m++) {
-
         let angle = Math.PI * 2 / this.objects.length;
-
         let xPos = this.x + cos(angle * m) * 200;
         let yPos = this.y - sin(angle * m) * 200;
-
-
         image(this.objects[m].img, xPos, yPos, this.w, this.h);
-
-
-    }
-  } else {
+      }
+    } else {
       for (let m = 0; m < this.objects.length; m++) {
         image(this.objects[m].img, this.x, this.y, this.w, this.h);
       }
     }
-
   }
   // }
 
 
-toggleHeader() {
-  let checkBox = document.getElementById(`${this.ui.header}`);
-  this.header = checkBox.checked;
 
-}
+  pressed() {
+    // Did I click on the rectangle?
+    if (this.rollover) {
+      this.dragging = true;
 
-toggleScramble() {
-  let checkBox = document.getElementById(`${this.ui.scramble}`);
-  this.scramble = checkBox.checked;
+      // If so, keep track of relative location of click to corner of rectangle
+      this.offsetX = this.x - mouseX;
+      this.offsetY = this.y - mouseY;
 
-}
-
-toggleStack() {
-  let checkBox = document.getElementById(`${this.ui.stack}`);
-  this.halo = !checkBox.checked;
-
-}
-
-toggleGradient() {
-  let checkBox = document.getElementById(`${this.ui.gradient}`);
-  this.gradient = checkBox.checked;
-  //= this.ui.header;
-}
-
-toggleParticles() {
-  let checkBox = document.getElementById(`${this.ui.particles}`);
-  // on affirmative check, generate starting points.
-  if (checkBox.checked) {
-    for (let i = 0; i < this.particles.number; i++) {
-      this.particles.x.push(this.center[0] + (random(this.aura.circum) / 2));
-      this.particles.y.push(this.center[1] + (random(this.aura.circum) / 2));
     }
   }
-  this.particles.active = checkBox.checked;
-  //= this.ui.header;
-}
-
-
-pressed() {
-  // Did I click on the rectangle?
-  if (this.rollover) {
-    this.dragging = true;
-
-    // If so, keep track of relative location of click to corner of rectangle
-    this.offsetX = this.x - mouseX;
-    this.offsetY = this.y - mouseY;
-
-}
-}
 
 
 
-released() {
-  // Quit dragging
-  this.dragging = false;
-}
-}
-
-
-
-
-
-
-
-
-
-
-
-function createMB() {
-  //grab + process name
-  let inputName = document.getElementById("newMBname").value; //grab the input from the form
-  inputName = inputName.replace(/\s/g, "_"); //remove spaces, add underscore
-  //check for duplicates
-  if (checkName(inputName, "mediaBundle")) {
-    logMB(inputName, "duplicate"); //creates notice for the log
-  } else {
-    let b = new MediaBundle(inputName, mediaBundles.length, (width / 2), (height / 2), 200, 200); //creates new JSON
-    mediaBundles.push(b); //adds name of JSON to list of bundles
-    updateIndex();
-    b.createUI();
-
-    //showMB(inputName);
-    logMB(b.name, "created"); //creates notice for the log
+  released() {
+    // Quit dragging
+    this.dragging = false;
   }
 }
+
+
+
+
+
+
+
+
 
 // Click and Drag an object
 // Daniel Shiffman <http://www.shiffman.net>
