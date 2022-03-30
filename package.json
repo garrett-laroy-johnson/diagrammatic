@@ -1,0 +1,45 @@
+{
+  "name": "diagrammatic",
+  "version": "1.0.0",
+  "description": "digital physical system for diagrammatic thought in motion. screen-side + \"xr\" versions.  ",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garrett-laroy-johnson/diagrammatic.git"
+  },
+  "keywords": [
+    "hci",
+    "embodiment",
+    "cognition",
+    "diagrammatic",
+    "thought",
+    "speculative",
+    "computing",
+    "media",
+    "object",
+    "process",
+    "node",
+    "reactivision",
+    "tuio",
+    "max"
+  ],
+  "author": "garrett laroy johnson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/garrett-laroy-johnson/diagrammatic/issues"
+  },
+  "homepage": "https://github.com/garrett-laroy-johnson/diagrammatic#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "node-osc": "^6.1.14",
+    "socket.io": "^4.4.1",
+    "sockets": "^0.4.2"
+  }
+}
