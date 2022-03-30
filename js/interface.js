@@ -1,4 +1,8 @@
-
+let mbPanels = [];
+let zoom = 1.00;
+let zMin = 0.05;
+let zMax = 9.00;
+let sensitivity = 0.005;
 
 function updateIndex() {
   for (i=0;i<mediaBundles.length;i++){
@@ -86,3 +90,11 @@ function playTone(){
 
    envelope.play(osc, 0, 0.1);
 }
+//
+//
+// function mouseWheel(event) {
+//   zoom += sensitivity * event.delta;
+//   zoom = constrain(zoom, zMin, zMax);
+//   //uncomment to block page scrolling
+//   return false;
+// }

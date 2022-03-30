@@ -6,8 +6,8 @@ let MediaBundle = class {
     this.name = name;
     this.x = width / 2;
     this.y = height / 2;
-    this.w = 400;
-    this.h = 400;
+    this.w = 200;
+    this.h = 200;
     this.index = index;
     this.marker;
     this.objects = [];
@@ -17,57 +17,67 @@ let MediaBundle = class {
     this.editing = false;
     //  this.filter = (BLUR, 0);
     this.gui;
+    this.obj_guis = [];
     this.params = {
 
       //interface/style options on off
       header: true,
-      headerTextColor: [255, 255, 255],
-      headerBGColor: [0, 0, 0],
+      foregroundColor: [255, 255, 255],
+      backgroundColor: [0, 0, 0],
 
-      headerTextSize: 30,
+      headerTextSize: 14,
       headerTextFont: "monospace",
 
       bgBox: true,
-      bgBoxColor: [0, 0, 0],
+
 
       scramble: true,
       scatter: true,
-
+      scatterRadius: 200
     };
     this.buildGUI();
   }
 
   buildGUI() {
-   this.gui =  QuickSettings.create(5, 5, `${this.name}`)
+
+    this.gui = QuickSettings.create(5, 5, `${this.name}`)
       .bindText("name", `${this.name}`, this)
       .bindBoolean("header", true, this.params)
-      .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
-      .bindColor("headerBGColor", "#ffffff", this.params)
-      .bindColor("headerTextColor", "#000000", this.params)
-      .bindRange("headerTextSize", 6, 200, 30, 1, this.params)
       .bindBoolean("bgBox", true, this.params)
-      .bindColor("bgBoxColor", "#000000", this.params)
-    //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
+      .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
+      .bindColor("backgroundColor", "#ffffff", this.params)
+      .bindColor("foregroundColor", "#000000", this.params)
+      .bindRange("headerTextSize", 6, 200, 14, 1, this.params)
+      //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
       .bindBoolean("scatter", false, this.params)
+      .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
+      .addButton("randomize scatter", this.scatterObjects())
       .bindBoolean("scramble", false, this.params)
-  }
+      .setKey("h");
 
+    mbPanels.push(this.gui);
+
+  }
+  scatterObjects() {
+
+  }
   //
   // //this function handles ADD MEDIA OBJECT file inputs
   handleFile(file) {
     // parse out the files
     // get info to make a mediaObject
-     let obj;
-      let name = file.name.split(' ')
-      name = name[0];
+    let obj;
+    let name = file.name.split(' ')
+    name = name[0];
 
-        if (file.type === 'image') {
-          let img = createImg(file.data).hide();
-          obj = new ImageObject(file, name, img);
-        }
+    if (file.type === 'image') {
+      let img = createImg(file.data).hide();
+      let index = this.objects.length;
+      obj = new ImageObject(file, name, img, index);
+    }
 
-  console.log(obj);
-  this.objects.push(obj);
+    console.log(obj);
+    this.objects.push(obj);
 
   }
 
@@ -82,17 +92,16 @@ let MediaBundle = class {
   over() {
     // Is mouse over object
 
-      if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
-        this.rollover = true;
-      } else {
-        this.rollover = false;
-      }
+    if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+      this.rollover = true;
+    } else {
+      this.rollover = false;
     }
-
+  }
   update() {
 
-    if(this.addMediaObject){
-      this.addMediaObject=false;
+    if (this.addMediaObject) {
+      this.addMediaObject = false;
       this.newObject();
     }
 
@@ -108,30 +117,38 @@ let MediaBundle = class {
       push();
       noFill();
       rectMode(CORNER);
-      if (this.rollover){
-        stroke("#FFA0FD");
+      translate(this.x, this.y);
+      if (this.rollover) {
+        stroke(this.params.foregroundColor);
       }
-
-      else{
-        stroke(this.params.bgBoxColor);
+            else {
+        stroke(this.params.backgroundColor);
       }
       strokeWeight(8);
-      rect(this.x, this.y, this.w, this.h)
+      rect(0, 0, this.w, this.h)
       pop()
     }
     if (this.params.header) {
-      let head = this.name;
       push();
       rectMode(CORNER);
       noStroke();
 
-      fill(this.params.headerBGColor);
+      if (this.rollover) {
+        fill(this.params.foregroundColor);
+      } else {
+        fill(this.params.backgroundColor);
+      }
 
+      rect(this.x, this.y, this.w, this.params.headerTextSize + textDescent());
       textFont(this.params.headerTextFont);
       textSize(this.params.headerTextSize);
-      rect(this.x, this.y, this.w, this.params.headerTextSize + textDescent());
-      fill(this.params.headerTextColor);
-      text(head, this.x, this.y + textAscent());
+
+      if (this.rollover) {
+        fill(this.params.backgroundColor);
+      } else {
+        fill(this.params.foregroundColor);
+      }
+      text(this.name, this.x, this.y + textAscent());
       pop()
     }
 
@@ -145,35 +162,33 @@ let MediaBundle = class {
         push();
         let angle = Math.PI * 2 / this.objects.length;
 
-        let xPos = this.x + this.objects[m].params.offsetX + cos(angle * m) * 200
-        let yPos = this.y + this.objects[m].params.offsetY - sin(angle * m) * 200;
+        let xPos = this.x + this.objects[m].params.offsetX + cos(angle * m) * this.params.scatterRadius
+        let yPos = this.y + this.objects[m].params.offsetY - sin(angle * m) * this.params.scatterRadius;
 
         imageMode(CORNER);
         translate(xPos, yPos)
-        scale(this.objects[m].params.scale/100;);
-        image(this.objects[m].img, 0, 0, this.w, this.h);
+        scale(this.objects[m].params.scale);
+        image(this.objects[m].img, 0, 0, this.objects[m].width, this.objects[m].height);
         pop();
       }
     } else if (this.params.scramble) {
       for (let m = 0; m < this.objects.length; m++) {
-        image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.w, this.h);
+        image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.objects[m].width, this.objects[m].height);
       }
     } else if (this.scatter) {
       for (let m = 0; m < this.objects.length; m++) {
         let angle = Math.PI * 2 / this.objects.length;
-        let xPos = this.x + cos(angle * m) * 200;
-        let yPos = this.y - sin(angle * m) * 200;
-        image(this.objects[m].img, xPos, yPos, this.w, this.h);
+        let xPos = this.x + cos(angle * m) * this.params.scatterRadius;
+        let yPos = this.y - sin(angle * m) * this.params.scatterRadius;
+        image(this.objects[m].img, xPos, yPos, this.objects[m].width, this.objects[m].height);
       }
     } else {
       for (let m = 0; m < this.objects.length; m++) {
-        image(this.objects[m].img, this.x, this.y, this.w, this.h);
+        image(this.objects[m].img, this.x, this.y, this.objects[m].width, this.objects[m].height);
       }
     }
   }
   // }
-
-
 
   pressed() {
     // Did I click on the rectangle?
@@ -187,21 +202,11 @@ let MediaBundle = class {
     }
   }
 
-
-
   released() {
     // Quit dragging
     this.dragging = false;
   }
 }
-
-
-
-
-
-
-
-
 
 // Click and Drag an object
 // Daniel Shiffman <http://www.shiffman.net>
