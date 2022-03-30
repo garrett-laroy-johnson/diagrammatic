@@ -31,10 +31,11 @@ function createMB(name) {
 function gotFile(file){
   let numBunds = 0;
   for (let bund of mediaBundles){
-    if (bund.rollover){
-     bund.handleFile(file);
+   if (bund.rollover){
+      bund.handleFile(file);
+
      numBunds++;
-    }
+   }
    }
    if (!numBunds){
      grabPhrase(file);
