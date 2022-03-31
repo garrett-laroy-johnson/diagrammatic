@@ -3,20 +3,35 @@ let frWindow = [];
 let frAvg;
 let avg = (array) => array.reduce((a,b) => a + b)  / 100;
 
+
+
+
 function setup() {
 let cnv =  createCanvas(windowWidth, windowHeight);
 imageMode(CENTER);
 cnv.drop(gotFile, playTone);
-initSound();
-playTone();
+initSound(); //turn oscillator on
+playTone(); // play a sound showing init.
+setupOsc(12000, 3334); //12000 is where I receive from MAX tuio-bridge.maxpat, 3334 is where I send back config to server
 }
 
 
 function draw() {
   background(255);
   ellipseMode(RADIUS);
+  //markerGrab();
+  mbDraw();
+  fps();
+};
 
 
+function markerGrab(){
+  for (i = 0; i < markerAdmin.markers.length;i++){
+    markerAdmin.markers[i].hello();
+}
+}
+
+function mbDraw(){
   for (i = 0; i < mediaBundles.length; i++) {
     mediaBundles[i].over();
     mediaBundles[i].update();
@@ -25,10 +40,8 @@ function draw() {
       //  mediaBundles[i].objects[s].updateVals();
     }
   }
- fps();
 
 }
-
 
 function initSound (){
   osc = new p5.SinOsc();

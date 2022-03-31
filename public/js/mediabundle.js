@@ -9,9 +9,8 @@ let MediaBundle = class {
     this.w = 200;
     this.h = 200;
     this.index = index;
-    this.marker;
     this.objects = [];
-    this.fileList = [];
+    this.fiducial = 0;
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
     this.editing = false;
@@ -33,13 +32,17 @@ let MediaBundle = class {
 
       scramble: true,
       scatter: true,
-      scatterRadius: 200
+      scatterRadius: 200,
+
+
+      useFiducialMarker : false,
+      anchorToMarker: "0",
     };
     this.buildGUI();
   }
 
   buildGUI() {
-
+    let self = this;
     this.gui = QuickSettings.create(5, 5, `${this.name}`)
       .bindText("name", `${this.name}`, this)
       .bindBoolean("header", true, this.params)
@@ -53,10 +56,9 @@ let MediaBundle = class {
       .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
       .addButton("randomize scatter", this.scatterObjects())
       .bindBoolean("scramble", false, this.params)
-      .setKey("h");
-
-    mbPanels.push(this.gui);
-
+      .bindBoolean("useFiducialMarker", false, this.params)
+      .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index})
+      mbPanels.push(this.gui);
   }
   scatterObjects() {
 
@@ -112,6 +114,14 @@ let MediaBundle = class {
     }
   };
   show() {
+
+    if (this.params.useFiducialMarker){
+      this.x = markerAdmin.markers[this.fiducial].x * width;
+      this.y = markerAdmin.markers[this.fiducial].y * height;
+
+
+    console.log(this.x, this.y);
+  }
 
     if (this.params.bgBox) {
       push();

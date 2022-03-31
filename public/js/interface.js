@@ -1,8 +1,10 @@
 let mbPanels = [];
-let zoom = 1.00;
-let zMin = 0.05;
-let zMax = 9.00;
-let sensitivity = 0.005;
+
+
+// let zoom = 1.00;
+// let zMin = 0.05;
+// let zMax = 9.00;
+// let sensitivity = 0.005;
 
 function updateIndex() {
   for (i=0;i<mediaBundles.length;i++){
@@ -53,7 +55,6 @@ function mousePressed() {
   for (i = 0; i < mediaBundles.length; i++) {
     mediaBundles[i].pressed();
     }
-
 }
 //
 function doubleClicked() {
