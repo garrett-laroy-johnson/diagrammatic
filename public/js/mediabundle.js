@@ -78,6 +78,14 @@ let MediaBundle = class {
       obj = new ImageObject(file, name, img, index);
     }
 
+    else if (file.type == 'video')
+
+    {
+      let vid = createVideo(file.data).hide();
+      let index = this.objects.length;
+      obj = new VideoObject(file, name, vid, index);
+    }
+
     console.log(obj);
     this.objects.push(obj);
 

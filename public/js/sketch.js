@@ -6,7 +6,8 @@ let avg = (array) => array.reduce((a,b) => a + b)  / 100;
 
 
 
-function setup() {
+function setup() {;
+
 let cnv =  createCanvas(windowWidth, windowHeight);
 imageMode(CENTER);
 cnv.drop(gotFile, playTone);
