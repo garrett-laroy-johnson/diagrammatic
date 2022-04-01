@@ -26,12 +26,6 @@ function draw() {
 };
 
 
-function markerGrab(){
-  for (i = 0; i < markerAdmin.markers.length;i++){
-    markerAdmin.markers[i].hello();
-}
-}
-
 function mbDraw(){
   for (i = 0; i < mediaBundles.length; i++) {
     mediaBundles[i].over();

@@ -30,12 +30,11 @@ class ImageObject extends MediaObject {
     }
     buildGUI() {
 
-     this.gui =  QuickSettings.create(5, 5, `${this.name}_panel`)
+     this.gui =  QuickSettings.create(5, this.index*30, `${this.name}`)
       .bindRange("scale", 0.01, 2.0, 0.1, 0.01, this.params)
       .bindRange("offsetX", -200, 200, 0, 1, this.params)
       .bindRange("offsetY", -200, 200, 0, 1, this.params)
       .addImage("image preview", this.img, imgLoaded)
-      .setKey("h")
       .collapse();
       }
   }

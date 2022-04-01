@@ -4,7 +4,7 @@ let mediaBundles = [];
 let MediaBundle = class {
   constructor(name, index) {
     this.name = name;
-    this.x = width / 2;
+    this.x = (width / 4) + (index * 220);
     this.y = height / 2;
     this.w = 200;
     this.h = 200;
@@ -28,6 +28,7 @@ let MediaBundle = class {
       headerTextFont: "monospace",
 
       bgBox: true,
+      borderWeight: 8,
 
 
       scramble: true,
@@ -43,10 +44,11 @@ let MediaBundle = class {
 
   buildGUI() {
     let self = this;
-    this.gui = QuickSettings.create(5, 5, `${this.name}`)
+    this.gui = QuickSettings.create(this.index*210, 10, `${this.name}`)
       .bindText("name", `${this.name}`, this)
       .bindBoolean("header", true, this.params)
       .bindBoolean("bgBox", true, this.params)
+      .bindRange("borderWeight", 0, 20, 5, 1, this.params)
       .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
       .bindColor("backgroundColor", "#ffffff", this.params)
       .bindColor("foregroundColor", "#000000", this.params)
@@ -54,14 +56,18 @@ let MediaBundle = class {
       //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
       .bindBoolean("scatter", false, this.params)
       .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
-      .addButton("randomize scatter", this.scatterObjects())
+      .addButton("randomize scatter", this.scatterObjects(self))
       .bindBoolean("scramble", false, this.params)
       .bindBoolean("useFiducialMarker", false, this.params)
       .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index})
       mbPanels.push(this.gui);
   }
-  scatterObjects() {
-
+  scatterObjects(self) {
+    console.log(self);
+for (let object of self.objects){
+  object.gui.params.offsetX = random(-200,200);
+  object.gui.params.offsetY = random(-200,200);
+}
   }
   //
   // //this function handles ADD MEDIA OBJECT file inputs
@@ -102,7 +108,7 @@ let MediaBundle = class {
   over() {
     // Is mouse over object
 
-    if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+    if (mouseX > this.x - (this.w/2) && mouseX < this.x + (this.w/2) && mouseY > this.y - (this.h/2) && mouseY < this.y + (this.h/2)) {
       this.rollover = true;
     } else {
       this.rollover = false;
@@ -124,17 +130,18 @@ let MediaBundle = class {
   show() {
 
     if (this.params.useFiducialMarker){
-      this.x = markerAdmin.markers[this.fiducial].x * width;
-      this.y = markerAdmin.markers[this.fiducial].y * height;
+
+      this.x = (1-markerAdmin.markers[this.fiducial].x) * width;
+      this.y = (1-markerAdmin.markers[this.fiducial].y) * height;
 
 
-    console.log(this.x, this.y);
-  }
+}
 
     if (this.params.bgBox) {
       push();
+      rectMode(CENTER);
       noFill();
-      rectMode(CORNER);
+
       translate(this.x, this.y);
       if (this.rollover) {
         stroke(this.params.foregroundColor);
@@ -142,13 +149,13 @@ let MediaBundle = class {
             else {
         stroke(this.params.backgroundColor);
       }
-      strokeWeight(8);
+      strokeWeight(this.params.borderWeight);
       rect(0, 0, this.w, this.h)
       pop()
     }
     if (this.params.header) {
       push();
-      rectMode(CORNER);
+   rectMode(CENTER);
       noStroke();
 
       if (this.rollover) {
@@ -157,7 +164,7 @@ let MediaBundle = class {
         fill(this.params.backgroundColor);
       }
 
-      rect(this.x, this.y, this.w, this.params.headerTextSize + textDescent());
+      rect(this.x, this.y - (this.h/2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
       textFont(this.params.headerTextFont);
       textSize(this.params.headerTextSize);
 
@@ -166,7 +173,7 @@ let MediaBundle = class {
       } else {
         fill(this.params.foregroundColor);
       }
-      text(this.name, this.x, this.y + textAscent());
+      text(this.name, this.x, this.y - (this.h/2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
       pop()
     }
 
@@ -183,7 +190,6 @@ let MediaBundle = class {
         let xPos = this.x + this.objects[m].params.offsetX + cos(angle * m) * this.params.scatterRadius
         let yPos = this.y + this.objects[m].params.offsetY - sin(angle * m) * this.params.scatterRadius;
 
-        imageMode(CORNER);
         translate(xPos, yPos)
         scale(this.objects[m].params.scale);
         image(this.objects[m].img, 0, 0, this.objects[m].width, this.objects[m].height);

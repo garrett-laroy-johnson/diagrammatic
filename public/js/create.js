@@ -29,6 +29,7 @@ function createMB(name) {
 
 
 function gotFile(file){
+  let mouse = [mouseX,mouseY];
   let numBunds = 0;
   for (let bund of mediaBundles){
    if (bund.rollover){
@@ -37,10 +38,10 @@ function gotFile(file){
      numBunds++;
    }
    }
-   if (!numBunds){
-     grabPhrase(file);
+   // if (!numBunds){
+   //   grabPhrase(file);
      //let bun = mediaBundles.length - 1; //get index of new media bundle
     // console.log(bun);
   //   bun.handleFile(file);
-     }
+     // }
    }

@@ -1,5 +1,3 @@
-let mbPanels = [];
-
 
 // let zoom = 1.00;
 // let zMin = 0.05;
@@ -45,9 +43,15 @@ function keyPressed() {
     writeDiagram();
   }
 
-
-  // let o = new MediaObject("file", "this", "www", "image");
+ if (key == "h"){
+panelVis();
 }
+
+if (key == "o"){
+panelOrg();
+}
+}
+
 
 
 // //trigger drag for given bundle

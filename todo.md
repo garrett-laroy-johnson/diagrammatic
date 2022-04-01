@@ -6,6 +6,7 @@
 4. create rescale function ✅
 5. display image
 6.  create rename bundle function (maybe this means deleting and recreating);
+7. check instancing / indexing problem with multiple panels generated from a JS Obj (mediaobject), media bundle
 
 
 ## Media types
@@ -32,7 +33,7 @@ Add (2) media types to Diagrammatic:
 ## Sandbox
 1. Toggle off bootstrap grid margins✅
 2. floating parameter menus✅
-3. Create full window canvas
+3. Create full window canvas ✅
 4. create HUD
 
 
@@ -42,4 +43,5 @@ Add (2) media types to Diagrammatic:
 3.18.22 // line 44 in media object --- working to add DOM elements to specifics isntances instead of the template....
 3/19/22 // Got DOM elements adding as part of mediaobject Object. However rename input is not working as desired.
 3/26/22 // adaptive background?
-3/30/22 // implemented pipeline from reactivision to node.js, mediabundles can be assigned to markers. 
+3/30/22 // implemented pipeline from reactivision to node.js, mediabundles can be assigned to markers.
+4/1/22 // pipeline works in reallife (YES!). Implementing keyboard hotkeys to organizing quicksettings. Having problems with quicksettings instancing... 

@@ -6,10 +6,14 @@ let markerAdmin = {
 
 class Marker {
  constructor (id, x, y, theta){
-    this.x = 1-x,
+    this.x = x,
     this.y = y,
     this.id = id,
     this.theta = theta
+    this.transform = {
+      invertY: true,
+      invertY: true
+    };
   }
 hello(){
   push();
@@ -35,8 +39,10 @@ function updateMarkers(data){
   			marker.x = data[2];
   			marker.y = data[3];
   			marker.theta = data[4];
-  	}
+    }
   }
+
+
 
   }
   else {
@@ -45,9 +51,6 @@ function updateMarkers(data){
   	let b = new Marker(data[1],data[2],data[3],data[4]);
   	markerAdmin.IDs.push(data[1])
   	markerAdmin.markers.push(b);
-  	console.log(b);
-    console.log(markerAdmin.IDs)
-
     for (let mb of mediaBundles){
     mb.gui.removeControl("anchorToMarker")
     .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index});
