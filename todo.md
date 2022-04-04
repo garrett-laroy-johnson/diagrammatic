@@ -7,6 +7,7 @@
 5. display image
 6.  create rename bundle function (maybe this means deleting and recreating);
 7. check instancing / indexing problem with multiple panels generated from a JS Obj (mediaobject), media bundle
+8. embed mediaobject panels in media bundle panels
 
 
 ## Media types
@@ -25,6 +26,7 @@ Add (2) media types to Diagrammatic:
 1. Implemented ✅
 2. Toggle on/off somehow ✅
 3. Smoothing - lerp ();
+4. add toggle to DisplayOnlyIfFiducialPresent
 
 ## Read/Write
 
@@ -44,4 +46,4 @@ Add (2) media types to Diagrammatic:
 3/19/22 // Got DOM elements adding as part of mediaobject Object. However rename input is not working as desired.
 3/26/22 // adaptive background?
 3/30/22 // implemented pipeline from reactivision to node.js, mediabundles can be assigned to markers.
-4/1/22 // pipeline works in reallife (YES!). Implementing keyboard hotkeys to organizing quicksettings. Having problems with quicksettings instancing... 
+4/1/22 // pipeline works in reallife (YES!). Implementing keyboard hotkeys to organizing quicksettings. Having problems with quicksettings instancing...
