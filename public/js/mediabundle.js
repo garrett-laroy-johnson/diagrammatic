@@ -36,12 +36,12 @@ let MediaBundle = class {
       scatterRadius: 200,
 
 
-      useFiducialMarker : false,
+      useFiducialMarker: false,
       anchorToMarker: "0",
     };
     this.buildGUI = function() {
       let self = this;
-      this.gui = QuickSettings.create(this.index*210, 10, `${this.name}`)
+      this.gui = QuickSettings.create(this.index * 210, 10, `${this.name}`)
         .bindText("name", `${this.name}`, this)
         .bindBoolean("header", true, this.params)
         .bindBoolean("bgBox", true, this.params)
@@ -56,30 +56,50 @@ let MediaBundle = class {
         .addButton("randomize scatter", this.scatterObjects(self))
         .bindBoolean("scramble", false, this.params)
         .bindBoolean("useFiducialMarker", false, this.params)
-        .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index})
-        .addDropDown("media objects", this.objects, function(object){showObjGUI(object.index)})
-        mbPanels.push(this.gui);
+        .addDropDown("anchorToMarker", markerAdmin.IDs, function(object) {
+          self.fiducial = object.index
+        })
+        .addDropDown("edit media object", [], function(object) {
+          self.showObjGUI(object.index)
+        })
+      mbPanels.push(this.gui);
     };
     this.buildGUI();
   }
 
 
 
-showObjGUI(){
+  showObjGUI(index) {
+    for (let i = 0; i < this.objects.length; i++) {
+      if (index == i) {
+        this.objects[i].destroyGUI();
+        this.objects[i].buildGUI();
+      }
+    }
+  }
 
-}
 
-refreshObjList(){
-  this.gui
-  .removeControl("media objects")
-  .addDropDown("media objects", this.objects, function(object){showObjGUI(object.index)})
-}
+
+  refreshObjList() {
+    let self = this;
+    let objectNames = [];
+    for (let i = 0; i < this.objects.length; i++) {
+      objectNames.push(this.objects[i].name);
+      this.objects[i].index = i;
+    };
+    this.gui
+      .removeControl("edit media object")
+      .addDropDown("edit media object", objectNames, function(object) {
+        self.showObjGUI(object.index)
+      });
+    this.showObjGUI(0);
+  }
 
   scatterObjects(self) {
-for (let object of self.objects){
-  object.gui.params.offsetX = random(-200,200);
-  object.gui.params.offsetY = random(-200,200);
-}
+    for (let object of self.objects) {
+      object.gui.params.offsetX = random(-200, 200);
+      object.gui.params.offsetY = random(-200, 200);
+    }
   }
   //
   // //this function handles ADD MEDIA OBJECT file inputs
@@ -91,24 +111,20 @@ for (let object of self.objects){
 
     // let path = URL.createObjectURL(file);
 
-      let mbIndex = this.index;
-            let index = this.objects.length;
+    let mbIndex = this.index;
+    let index = this.objects.length;
+
 
     if (file.type === 'image') {
       let img = createImg(file.data, "").hide();
       obj = new ImageObject(file, name, img, index, mbIndex);
-    }
-
-    else if (file.type == 'video')
-
-    {
+    } else if (file.type == 'video') {
       let vid = createVideo(file.data).hide();
       obj = new VideoObject(file, name, vid, index, mbIndex);
     }
 
-    console.log(obj);
     this.objects.push(obj);
-
+    this.refreshObjList();
   }
 
   destructor() {
@@ -122,7 +138,7 @@ for (let object of self.objects){
   over() {
     // Is mouse over object
 
-    if (mouseX > this.x - (this.w/2) && mouseX < this.x + (this.w/2) && mouseY > this.y - (this.h/2) && mouseY < this.y + (this.h/2)) {
+    if (mouseX > this.x - (this.w / 2) && mouseX < this.x + (this.w / 2) && mouseY > this.y - (this.h / 2) && mouseY < this.y + (this.h / 2)) {
       this.rollover = true;
     } else {
       this.rollover = false;
@@ -143,13 +159,13 @@ for (let object of self.objects){
   };
   show() {
 
-    if (this.params.useFiducialMarker){
+    if (this.params.useFiducialMarker) {
 
-      this.x = (1-markerAdmin.markers[this.fiducial].x) * width;
-      this.y = (1-markerAdmin.markers[this.fiducial].y) * height;
+      this.x = (1 - markerAdmin.markers[this.fiducial].x) * width;
+      this.y = (1 - markerAdmin.markers[this.fiducial].y) * height;
 
 
-}
+    }
 
     if (this.params.bgBox) {
       push();
@@ -159,8 +175,7 @@ for (let object of self.objects){
       translate(this.x, this.y);
       if (this.rollover) {
         stroke(this.params.foregroundColor);
-      }
-            else {
+      } else {
         stroke(this.params.backgroundColor);
       }
       strokeWeight(this.params.borderWeight);
@@ -169,7 +184,7 @@ for (let object of self.objects){
     }
     if (this.params.header) {
       push();
-   rectMode(CENTER);
+      rectMode(CENTER);
       noStroke();
 
       if (this.rollover) {
@@ -178,7 +193,7 @@ for (let object of self.objects){
         fill(this.params.backgroundColor);
       }
 
-      rect(this.x, this.y - (this.h/2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
+      rect(this.x, this.y - (this.h / 2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
       textFont(this.params.headerTextFont);
       textSize(this.params.headerTextSize);
 
@@ -187,63 +202,73 @@ for (let object of self.objects){
       } else {
         fill(this.params.foregroundColor);
       }
-      text(this.name, this.x, this.y - (this.h/2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
+      text(this.name, this.x, this.y - (this.h / 2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
       pop()
     }
 
 
+    let xPos = this.x; // hold x and y pos in memory to apply transformations
+    let yPos = this.y;
 
-    if (this.params.scramble && this.params.scatter) {
-      let xPos = this.x;
-      let yPos = this.Y
-
-      for (let m = 0; m < this.objects.length; m++) {
-        push();
+    for (let m = 0; m < this.objects.length; m++) {
         let angle = Math.PI * 2 / this.objects.length;
-
-        let xPos = this.x + this.objects[m].params.offsetX + cos(angle * m) * this.params.scatterRadius
-        let yPos = this.y + this.objects[m].params.offsetY - sin(angle * m) * this.params.scatterRadius;
-
-        translate(xPos, yPos)
-        scale(this.objects[m].params.scale);
-        image(this.objects[m].img, 0, 0, this.objects[m].width, this.objects[m].height);
-        pop();
+      push();
+      if (this.params.scramble) {
+        xPos = xPos + this.objects[m].params.offsetX;
+        yPos = yPos + this.objects[m].params.offsetY;
       }
-    } else if (this.params.scramble) {
-      for (let m = 0; m < this.objects.length; m++) {
-        image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.objects[m].width, this.objects[m].height);
+      if (this.params.scatter) {
+        xPos = xPos + cos(angle * m) * this.params.scatterRadius;
+        yPos = yPos - sin(angle * m) * this.params.scatterRadius;
       }
-    } else if (this.scatter) {
-      for (let m = 0; m < this.objects.length; m++) {
-        let angle = Math.PI * 2 / this.objects.length;
-        let xPos = this.x + cos(angle * m) * this.params.scatterRadius;
-        let yPos = this.y - sin(angle * m) * this.params.scatterRadius;
-        image(this.objects[m].img, xPos, yPos, this.objects[m].width, this.objects[m].height);
-      }
-    } else {
-      for (let m = 0; m < this.objects.length; m++) {
-        image(this.objects[m].img, this.x, this.y, this.objects[m].width, this.objects[m].height);
-      }
-    }
-  }
-  // }
 
-  pressed() {
-    // Did I click on the rectangle?
-    if (this.rollover) {
-      this.dragging = true;
-
-      // If so, keep track of relative location of click to corner of rectangle
-      this.offsetX = this.x - mouseX;
-      this.offsetY = this.y - mouseY;
-
+      translate(xPos, yPos)
+      scale(this.objects[m].params.scale);
+      image(this.objects[m].img, 0, 0, this.objects[m].width, this.objects[m].height);
+      pop();
     }
   }
 
-  released() {
-    // Quit dragging
-    this.dragging = false;
+
+
+
+//
+//
+//   else if (this.params.scramble) {
+//     for (let m = 0; m < this.objects.length; m++) {
+//       image(this.objects[m].img, this.x + this.objects[m].offset[0], this.y + this.objects[m].offset[1], this.objects[m].width, this.objects[m].height);
+//     }
+//   } else if (this.scatter) {
+//     for (let m = 0; m < this.objects.length; m++) {
+//       let angle = Math.PI * 2 / this.objects.length;
+//       let xPos = this.x + cos(angle * m) * this.params.scatterRadius;
+//       let yPos = this.y - sin(angle * m) * this.params.scatterRadius;
+//       image(this.objects[m].img, xPos, yPos, this.objects[m].width, this.objects[m].height);
+//     }
+//   } else {
+//     for (let m = 0; m < this.objects.length; m++) {
+//       image(this.objects[m].img, this.x, this.y, this.objects[m].width, this.objects[m].height);
+//     }
+//   }
+// }
+// }
+
+pressed() {
+  // Did I click on the rectangle?
+  if (this.rollover) {
+    this.dragging = true;
+
+    // If so, keep track of relative location of click to corner of rectangle
+    this.offsetX = this.x - mouseX;
+    this.offsetY = this.y - mouseY;
+
   }
+}
+
+released() {
+  // Quit dragging
+  this.dragging = false;
+}
 }
 
 // Click and Drag an object

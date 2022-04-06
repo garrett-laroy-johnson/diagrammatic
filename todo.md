@@ -2,12 +2,12 @@
 ## QuickSettings interface
 1. Generate QuickSettings Panels for new media objects with parameterization options✅
 2. create rename object function
-3. create delete object function
+3. create delete object function✅
 4. create rescale function ✅
 5. display image
 6.  create rename bundle function (maybe this means deleting and recreating);
 7. check instancing / indexing problem with multiple panels generated from a JS Obj (mediaobject), media bundle ✅
-8. embed mediaobject panels in media bundle panels
+8. embed mediaobject panels in media bundle panels ✅
 
 
 ## Media types
@@ -29,9 +29,9 @@ Add (2) media types to Diagrammatic:
 4. add toggle to DisplayOnlyIfFiducialPresent
 
 ## Read/Write
-
+1. implement
 ## GitHub compatibility & documentation
-
+1. implement
 ## Sandbox
 1. Toggle off bootstrap grid margins✅
 2. floating parameter menus✅
@@ -47,3 +47,4 @@ Add (2) media types to Diagrammatic:
 3/26/22 // adaptive background?
 3/30/22 // implemented pipeline from reactivision to node.js, mediabundles can be assigned to markers.
 4/1/22 // pipeline works in reallife (YES!). Implementing keyboard hotkeys to organizing quicksettings. Having problems with quicksettings instancing...
+4/6/22 // mediaObject GUI creation works. stuck in the middle of debugging scatter + scramble.

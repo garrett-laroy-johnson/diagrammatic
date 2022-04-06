@@ -25,42 +25,38 @@ class ImageObject extends MediaObject {
       //offset
       offsetY : 0,
       offsetX : 0,
+      done : false
     }
     this.img = img; // before it was loadImage(path);
     // this.url = URL.createObjectURL(this.file);
 
-      this.hideGUI = function(){
+      this.destroyGUI = function(){
         mediaBundles[this.mbIndex].gui
-        .hideControl("subpanel")
-        .hideControl("scale")
-        .hideControl("offsetX")
-        .hideControl("offsetY")
-    //    .hideControl("preview");
-
-        console.log("hiding control");
-      };
-      this.showGUI = function(){
-        mediaBundles[this.mbIndex].gui
-        .showControl("subpanel")
-        .showControl("scale")
-        .showControl("offsetX")
-        .showControl("offsetY")
+        .removeControl("media object panel")
+        .removeControl("rename")
+        .removeControl("scale")
+        .removeControl("offsetX")
+        .removeControl("offsetY")
+        // .removeControl("delete")
       //  .showControl("preview");
       }
       this.loaded = function (){
       console.log("image loaded");
-      this.hideGUI();
+
       };
       this.buildGUI = function() {
+        this.params.done = false;
         mediaBundles[this.mbIndex].gui
-        .addHTML("subpanel", `<h2>${this.name} parameters</h2>`)
-        .bindRange("scale", 0.01, 2.0, 0.1, 0.01, this.params)
-        .bindRange("offsetX", -200, 200, 0, 1, this.params)
-        .bindRange("offsetY", -200, 200, 0, 1, this.params)
+        .addHTML("media object panel", `<h2>${this.name} parameters</h2><button onclick="deleteObj(${this.mbIndex},${this.index})">delete media object</button>`)
+        .bindRange("scale", 0.001, 1.0, this.params.scale, 0.001, this.params)
+        // .bindText("rename",)
+        .bindRange("offsetX", -200, 200, this.params.offsetX, 1, this.params)
+        .bindRange("offsetY", -200, 200, this.params.offsetY, 1, this.params)
+        // .addButton("delete", deleteObj(this.mbIndex,this.index));
       //  .addImage("preview", this.img, this.loaded())
+       this.params.done = true;
         }
-       this.buildGUI();
-    }
+        }
 
 
   }

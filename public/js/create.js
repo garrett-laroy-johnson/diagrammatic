@@ -33,7 +33,19 @@ function gotFile(file){
       bund.handleFile(file);
 
    }
-   bund.refreshObjList();
+  // bund.refreshObjList();
    }
 
    }
+
+function deleteObj(mb, index) {
+
+  if(mediaBundles[mb].objects[index].params.done){
+    mediaBundles[mb].objects[index].params.done = false;
+  mediaBundles[mb].objects[index].destroyGUI();
+  mediaBundles[mb].objects.splice(index, 1);
+
+  mediaBundles[mb].refreshObjList();
+    mediaBundles[mb].showObjGUI(0);
+}
+}
