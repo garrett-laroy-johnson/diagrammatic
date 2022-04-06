@@ -23,25 +23,17 @@ function createMB(name) {
   }
   inputName = new MediaBundle(inputName, mediaBundles.length); //creates new JSON
   mediaBundles.push(inputName); //adds name of JSON to list of bundles
-  console.log(mediaBundles);
  return name;
 }
 
 
 function gotFile(file){
-  let mouse = [mouseX,mouseY];
-  let numBunds = 0;
   for (let bund of mediaBundles){
    if (bund.rollover){
       bund.handleFile(file);
 
-     numBunds++;
    }
+   bund.refreshObjList();
    }
-   // if (!numBunds){
-   //   grabPhrase(file);
-     //let bun = mediaBundles.length - 1; //get index of new media bundle
-    // console.log(bun);
-  //   bun.handleFile(file);
-     // }
+
    }

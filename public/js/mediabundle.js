@@ -21,8 +21,8 @@ let MediaBundle = class {
 
       //interface/style options on off
       header: true,
-      foregroundColor: [255, 255, 255],
-      backgroundColor: [0, 0, 0],
+      foregroundColor: "#ffffff",
+      backgroundColor: "#000000",
 
       headerTextSize: 14,
       headerTextFont: "monospace",
@@ -39,31 +39,43 @@ let MediaBundle = class {
       useFiducialMarker : false,
       anchorToMarker: "0",
     };
+    this.buildGUI = function() {
+      let self = this;
+      this.gui = QuickSettings.create(this.index*210, 10, `${this.name}`)
+        .bindText("name", `${this.name}`, this)
+        .bindBoolean("header", true, this.params)
+        .bindBoolean("bgBox", true, this.params)
+        .bindRange("borderWeight", 0, 20, 5, 1, this.params)
+        .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
+        .bindColor("backgroundColor", "#000000", this.params)
+        .bindColor("foregroundColor", "#ffffff", this.params)
+        .bindRange("headerTextSize", 6, 200, 14, 1, this.params)
+        //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
+        .bindBoolean("scatter", false, this.params)
+        .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
+        .addButton("randomize scatter", this.scatterObjects(self))
+        .bindBoolean("scramble", false, this.params)
+        .bindBoolean("useFiducialMarker", false, this.params)
+        .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index})
+        .addDropDown("media objects", this.objects, function(object){showObjGUI(object.index)})
+        mbPanels.push(this.gui);
+    };
     this.buildGUI();
   }
 
-  buildGUI() {
-    let self = this;
-    this.gui = QuickSettings.create(this.index*210, 10, `${this.name}`)
-      .bindText("name", `${this.name}`, this)
-      .bindBoolean("header", true, this.params)
-      .bindBoolean("bgBox", true, this.params)
-      .bindRange("borderWeight", 0, 20, 5, 1, this.params)
-      .bindDropDown("headerTextFont", ["serif", "sans-serif", "monospace", "cursive", "fantasy"], this.params)
-      .bindColor("backgroundColor", "#ffffff", this.params)
-      .bindColor("foregroundColor", "#000000", this.params)
-      .bindRange("headerTextSize", 6, 200, 14, 1, this.params)
-      //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
-      .bindBoolean("scatter", false, this.params)
-      .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
-      .addButton("randomize scatter", this.scatterObjects(self))
-      .bindBoolean("scramble", false, this.params)
-      .bindBoolean("useFiducialMarker", false, this.params)
-      .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index})
-      mbPanels.push(this.gui);
-  }
+
+
+showObjGUI(){
+
+}
+
+refreshObjList(){
+  this.gui
+  .removeControl("media objects")
+  .addDropDown("media objects", this.objects, function(object){showObjGUI(object.index)})
+}
+
   scatterObjects(self) {
-    console.log(self);
 for (let object of self.objects){
   object.gui.params.offsetX = random(-200,200);
   object.gui.params.offsetY = random(-200,200);
@@ -76,20 +88,22 @@ for (let object of self.objects){
     // get info to make a mediaObject
     let obj;
     let name = file.name.split(' ')
-    name = name[0];
+
+    // let path = URL.createObjectURL(file);
+
+      let mbIndex = this.index;
+            let index = this.objects.length;
 
     if (file.type === 'image') {
-      let img = createImg(file.data).hide();
-      let index = this.objects.length;
-      obj = new ImageObject(file, name, img, index);
+      let img = createImg(file.data, "").hide();
+      obj = new ImageObject(file, name, img, index, mbIndex);
     }
 
     else if (file.type == 'video')
 
     {
       let vid = createVideo(file.data).hide();
-      let index = this.objects.length;
-      obj = new VideoObject(file, name, vid, index);
+      obj = new VideoObject(file, name, vid, index, mbIndex);
     }
 
     console.log(obj);

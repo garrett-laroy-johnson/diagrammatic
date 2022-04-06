@@ -6,7 +6,7 @@
 4. create rescale function ✅
 5. display image
 6.  create rename bundle function (maybe this means deleting and recreating);
-7. check instancing / indexing problem with multiple panels generated from a JS Obj (mediaobject), media bundle
+7. check instancing / indexing problem with multiple panels generated from a JS Obj (mediaobject), media bundle ✅
 8. embed mediaobject panels in media bundle panels
 
 
