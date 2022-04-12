@@ -12,14 +12,14 @@
 
 ## Media types
 Add (2) media types to Diagrammatic:
-1. Text
+1. Text ✅
 2. Video
 
 ## Images
 1. get aspect ratio of image uploads ✅
 2. implement scale ✅
 3. implement rotate
-4. need to square scramble + scatter display modes
+4. need to square scramble + scatter display modes ✅
 5. adaptive background square (goes to extreme x and y points)
 
 ## Fiducial Markers
@@ -29,7 +29,8 @@ Add (2) media types to Diagrammatic:
 4. add toggle to DisplayOnlyIfFiducialPresent
 
 ## Read/Write
-1. implement
+1. implement ✅
+2. investigate problem with saving images. circular reference due to p5 library. 
 ## GitHub compatibility & documentation
 1. implement
 ## Sandbox
