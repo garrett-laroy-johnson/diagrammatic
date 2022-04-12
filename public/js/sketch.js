@@ -31,10 +31,7 @@ function mbDraw(){
     mediaBundles[i].over();
     mediaBundles[i].update();
     mediaBundles[i].show();
-    for (s = 0; s < mediaBundles[i].objects.length; s++) {
-      //  mediaBundles[i].objects[s].updateVals();
     }
-  }
 
 }
 

@@ -31,8 +31,10 @@ let MediaBundle = class {
       borderWeight: 8,
 
 
-      scramble: true,
-      scatter: true,
+      scrambleAmount: 200,
+      scramble: false,
+
+      scatter: false,
       scatterRadius: 200,
 
 
@@ -53,7 +55,11 @@ let MediaBundle = class {
         //  .addFileChooser("addMediaObjectFile","Add New Media Object", "", this.handleFile.bind(mediaBundles[this.index]))
         .bindBoolean("scatter", false, this.params)
         .bindRange("scatterRadius", 1, 1000, 200, 10, this.params)
-        .addButton("randomize scatter", this.scatterObjects(self))
+        .addButton("randomize scramble", function() {
+
+          self.scrambleObjects(self.objects)
+        })
+        .bindRange("scrambleAmount", 1, 1000, 200, 10, this.params)
         .bindBoolean("scramble", false, this.params)
         .bindBoolean("useFiducialMarker", false, this.params)
         .addDropDown("anchorToMarker", markerAdmin.IDs, function(object) {
@@ -95,11 +101,13 @@ let MediaBundle = class {
     this.showObjGUI(0);
   }
 
-  scatterObjects(self) {
-    for (let object of self.objects) {
-      object.gui.params.offsetX = random(-200, 200);
-      object.gui.params.offsetY = random(-200, 200);
+  scrambleObjects(objects, amt) {
+    console.log("hi " + objects);
+    for (let object of objects) {
+      object.params.offsetX = random(-1, 1);
+      object.params.offsetY = random(-1, 1);
     }
+    
   }
   //
   // //this function handles ADD MEDIA OBJECT file inputs
@@ -108,6 +116,7 @@ let MediaBundle = class {
     // get info to make a mediaObject
     let obj;
     let name = file.name.split(' ')
+    name.splice(name.length,1);
 
     // let path = URL.createObjectURL(file);
 
@@ -121,6 +130,11 @@ let MediaBundle = class {
     } else if (file.type == 'video') {
       let vid = createVideo(file.data).hide();
       obj = new VideoObject(file, name, vid, index, mbIndex);
+    }
+    else if (file.type == 'text') {
+      let text = String(file.data);
+      console.log(text);
+      obj = new TextObject(file, name, text, index, mbIndex);
     }
 
     this.objects.push(obj);
@@ -207,24 +221,44 @@ let MediaBundle = class {
     }
 
 
-    let xPos = this.x; // hold x and y pos in memory to apply transformations
-    let yPos = this.y;
 
-    for (let m = 0; m < this.objects.length; m++) {
+
+    for (i=0;i<this.objects.length;i++) {
+        let xPos = this.x; // hold x and y pos in memory to apply transformations
+        let yPos = this.y;
         let angle = Math.PI * 2 / this.objects.length;
+
       push();
       if (this.params.scramble) {
-        xPos = xPos + this.objects[m].params.offsetX;
-        yPos = yPos + this.objects[m].params.offsetY;
+        xPos = xPos + (this.objects[i].params.offsetX*this.params.scrambleAmount);
+        yPos = yPos + (this.objects[i].params.offsetY*this.params.scrambleAmount);
       }
       if (this.params.scatter) {
-        xPos = xPos + cos(angle * m) * this.params.scatterRadius;
-        yPos = yPos - sin(angle * m) * this.params.scatterRadius;
+        xPos = xPos + (cos(angle * i * this.params.scatterRadius));
+        yPos = yPos - (sin(angle * i * this.params.scatterRadius));
       }
 
       translate(xPos, yPos)
-      scale(this.objects[m].params.scale);
-      image(this.objects[m].img, 0, 0, this.objects[m].width, this.objects[m].height);
+
+
+
+switch(this.objects[i].type){
+  case 'image':
+    scale(this.objects[i].params.scale);
+    image(this.objects[i].img, 0, 0, this.objects[i].width, this.objects[i].height);
+    break;
+  case 'text':
+    noStroke();
+    fill(this.objects[i].params.textColor);
+    textSize(this.objects[i].params.textSize);
+    textFont(this.objects[i].params.font);
+    text(this.objects[i].params.txt, 0, 0, this.objects[i].width)
+    break;
+  case 'video':
+    console.log("you haven't added ability this yet.");
+    break;
+}
+
       pop();
     }
   }

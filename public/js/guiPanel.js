@@ -1,3 +1,5 @@
+
+
 let panelAdmin = {
   show: true,
 }
@@ -32,13 +34,5 @@ function panelOrg (){
     mediaBundles[i].gui.collapse();
   }
     mediaBundles[i].gui.setPosition(i*210,10);
-
-
-    for (let p = 0; p < mediaBundles[i].objects.length;p++){
-      if(mediaBundles[i].objects[p].gui._collapsed == false){
-        mediaBundles[i].objects[p].gui.collapse();
-      }
-      mediaBundles[i].objects[p].gui.setPosition(i*210, 50 + (p*30));
-    }
   }
 }

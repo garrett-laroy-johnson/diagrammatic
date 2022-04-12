@@ -32,22 +32,26 @@ function logMB(inputName, log)  {
   $("#MBCreateOutput").fadeOut(2000);
 }
 
-
+let keys = [];
 
 function keyPressed() {
+if(keys.length>=2){
+  keys.splice(0,1);
+}
+keys.push(key);
   // trigger name prompt for MB
-  if (key == "n") {
+  if (keys [0] == "Alt" && keys [1] == "n") {
     getPhrase(); //get name and then chain to "createMB"
   }
-  if(key == "w"){
+  if(keys [0] == "Alt" && keys [1] == "w"){
     writeDiagram();
   }
 
- if (key == "h"){
+ if (keys [0] == "Alt" && keys [1] == "h"){
 panelVis();
 }
 
-if (key == "o"){
+if (keys [0] == "Alt" && keys [1] == "o"){
 panelOrg();
 }
 }
