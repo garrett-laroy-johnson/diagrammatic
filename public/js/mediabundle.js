@@ -63,7 +63,8 @@ let MediaBundle = class {
         .bindBoolean("scramble", false, this.params)
         .bindBoolean("useFiducialMarker", false, this.params)
         .addDropDown("anchorToMarker", markerAdmin.IDs, function(object) {
-          self.fiducial = object.index
+          self.fiducial = object.index;
+          console.log("Test")
         })
         .addDropDown("edit media object", [], function(object) {
           self.showObjGUI(object.index)
@@ -107,7 +108,7 @@ let MediaBundle = class {
       object.params.offsetX = random(-1, 1);
       object.params.offsetY = random(-1, 1);
     }
-    
+
   }
   //
   // //this function handles ADD MEDIA OBJECT file inputs
@@ -115,8 +116,14 @@ let MediaBundle = class {
     // parse out the files
     // get info to make a mediaObject
     let obj;
-    let name = file.name.split(' ')
-    name.splice(name.length,1);
+
+
+  let name  = file.name.split('.')
+  name.splice(name.length-1, 1);
+  name = name[0].split(' ');
+  console.log(name);
+  name = name.join('_');
+
 
     // let path = URL.createObjectURL(file);
 

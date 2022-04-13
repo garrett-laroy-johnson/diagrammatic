@@ -53,7 +53,11 @@ function updateMarkers(data){
   	markerAdmin.markers.push(b);
     for (let mb of mediaBundles){
     mb.gui.removeControl("anchorToMarker")
-    .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){self.fiducial = object.index});
+    .addDropDown("anchorToMarker", markerAdmin.IDs, function (object){mb.fiducial = object.index;
+      console.log(object);
+      console.log(mb);
+    });
+
         }
 
 
