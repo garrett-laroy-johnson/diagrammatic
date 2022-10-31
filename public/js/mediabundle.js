@@ -151,10 +151,6 @@ let MediaBundle = class {
     }
   }
   update() {
-    if (this.addMediaObject) {
-      this.addMediaObject = false;
-      this.newObject();
-    }
     // Adjust location if being dragged
     if (this.dragging) {
       this.x = mouseX + this.offsetX;
@@ -198,9 +194,9 @@ let MediaBundle = class {
         fill(this.params.foregroundColor);
       }
       text(this.name, this.x, this.y - (this.h / 2), this.w + this.params.borderWeight, this.params.headerTextSize + textDescent());
-      pop()
+      pop();
     }
-    for (i = 0; i < this.objects.length; i++) {
+    for (let i = 0; i < this.objects.length; i++) {
       let xPos = this.x; // hold x and y pos in memory to apply transformations
       let yPos = this.y;
       let angle = Math.PI * 2 / this.objects.length;
@@ -214,21 +210,15 @@ let MediaBundle = class {
         yPos = yPos - (sin(angle * i * this.params.scatterRadius));
       }
       translate(xPos, yPos)
-      switch (this.objects[i].type) {
-        case 'image':
-          scale(this.objects[i].params.scale);
-          image(this.objects[i].img, 0, 0, this.objects[i].width, this.objects[i].height);
-          break;
-        case 'text':
-          noStroke();
-          fill(this.objects[i].params.textColor);
-          textSize(this.objects[i].params.textSize);
-          textFont(this.objects[i].params.font);
-          text(this.objects[i].params.txt, 0, 0, this.objects[i].width)
-          break;
-        case 'video':
-          console.log("you haven't added ability this yet.");
-          break;
+      if (this.objects[i].type == 'image') {
+        scale(this.objects[i].params.scale);
+        image(this.objects[i].img, 0, 0, this.objects[i].width, this.objects[i].height);
+      } else if (this.objects[i].type == 'text') {
+        noStroke();
+        fill(this.objects[i].params.textColor);
+        textSize(this.objects[i].params.textSize);
+        textFont(this.objects[i].params.font);
+        text(this.objects[i].params.txt, 0, 0, this.objects[i].width)
       }
       pop();
     }
